@@ -6,14 +6,14 @@ import Loading from "@/components/loading/Loding";
 
 const ImageUpload = ({ setCurrentStep, setComplete }) => {
   const [imageURL, setImageURL] = useState(null);
-  const [isGreen, setIsGreen] = useState(false);
+  // const [isGreen, setIsGreen] = useState(false);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [currentFileUrl, setCurrentFileUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChangeGreenBg = () => {
-    setIsGreen((prevState) => !prevState);
-  };
+  // const handleChangeGreenBg = () => {
+  //   setIsGreen((prevState) => !prevState);
+  // };
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -119,7 +119,7 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
   };
 
   return (
-    <div className="font-sans my-20">
+    <div className="font-sans mt-20">
       {loading && <Loading />}
       {!loading && (
         <label
@@ -156,20 +156,21 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
                 Upload File
               </h2>
               <p className="mt-2 text-gray-500 tracking-wide">
-                Upload or drag & drop your file SVG, PNG, JPG, or GIF.
+                Upload or drag & drop your voice file.
               </p>
 
               <input
                 id="dropzone-file"
                 type="file"
                 className="hidden"
+                accept="audio/*"
                 onChange={handleFileUpload}
               />
             </>
           )}
         </label>
       )}
-      <div className="flex justify-center items-center max-w-[180px] mx-auto my-4">
+      {/* <div className="flex justify-center items-center max-w-[180px] mx-auto my-4">
         <span>White</span>
         <label className="switch_obj flex justify-center my-5 mx-auto">
           <input
@@ -180,7 +181,7 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
           <span className="slider_obj"></span>
         </label>
         <span>Green</span>
-      </div>
+      </div> */}
       {currentFileUrl && (
         <div className="flex justify-center items-center">
           <button className="btn mt-2 bg-gradient-to-r from-pink-500 to-violet-500 rounded-lg px-2 py-1">

@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Steps from "./Steps";
+import MusicPlayer from "./MusicPlayer";
 import { useEffect } from "react";
 import { UserAuth } from "@/components/authprovider/AuthContext";
 
@@ -21,7 +22,7 @@ const Page = () => {
     <section className="mx-5 my-10">
       <div className="flex justify-center">
         <span className="text-2xl md:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#FD5261] to-[#AA26B6]">
-          Remove Background
+          Voice Isolation & Music Separation
         </span>
       </div>
 
@@ -30,8 +31,8 @@ const Page = () => {
           How to Use
         </p>
       </div>
-
       <Steps />
+      <MusicPlayer />
     </section>
   );
 };

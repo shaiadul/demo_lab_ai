@@ -3,16 +3,17 @@ import { faImage, faObjectGroup } from "@fortawesome/free-regular-svg-icons";
 import {
   faHome,
   faVideo,
+  faVoicemail,
   faWaterLadder,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { usePathname } from 'next/navigation'
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const AsideDashboard = () => {
-  const pathname = usePathname()
-  
+  const pathname = usePathname();
+
   return (
     <div className="fixed hidden md:flex flex-col top-14 left-0 w-14 hover:w-64 md:w-64 h-full transition-all duration-300 border-none z-10 sidebar ">
       <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow ">
@@ -20,13 +21,12 @@ const AsideDashboard = () => {
           <li>
             <Link
               href="/dashboard/personalfeed"
-              className={` ${pathname == '/dashboard/personalfeed' ? 'bg-[#1b1c20]' : ''} relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
+              className={` ${
+                pathname == "/dashboard/personalfeed" ? "bg-[#1b1c20]" : ""
+              } relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
             >
               <span className="inline-flex justify-center items-center ml-4">
-                <FontAwesomeIcon
-                  icon={faHome}
-                  className={` faIcon `}
-                />
+                <FontAwesomeIcon icon={faHome} className={` faIcon `} />
               </span>
               <span className="ml-2 text-md font-semibold tracking-wide truncate">
                 Personal Feed
@@ -35,21 +35,24 @@ const AsideDashboard = () => {
           </li>
           <li>
             <Link
-              href="/dashboard/backgroundremoval"
-              className={`${pathname == '/dashboard/backgroundremoval' ? 'bg-[#1b1c20]' : ''} relative flex flex-row items-center h-11 focus:outline-none  text-white-600 hover:text-white-800 pr-6 rounded-md`}
+              href="/dashboard/voiceisolation"
+              className={`${
+                pathname == "/dashboard/voiceisolation" ? "bg-[#1b1c20]" : ""
+              } relative flex flex-row items-center h-11 focus:outline-none  text-white-600 hover:text-white-800 pr-6 rounded-md`}
             >
               <span className="inline-flex justify-center items-center ml-4">
                 <FontAwesomeIcon
-                  icon={faImage}
-                  className={` w-5 h-5 ${pathname == '/dashboard/personalfeed' ? 'tex' : 'text-white'}`}
+                  icon={faVoicemail}
+                  className={` w-5 h-5 ${
+                    pathname == "/dashboard/personalfeed" ? "text-gray" : "text-white"
+                  }`}
                 />
               </span>
               <span className="ml-2 text-md font-semibold tracking-wide truncate">
-                Background Removal
+                Voice Isolation
               </span>
             </Link>
           </li>
-         
         </ul>
 
         {/* <option value="">Gulf Medical Center</option>
@@ -58,10 +61,7 @@ const AsideDashboard = () => {
 
  */}
 
-
-        <p className="mb-14 px-5 py-3 hidden md:block text-center text-xs">
-          Copyright @2023 Shardmind
-        </p>
+       
       </div>
     </div>
   );

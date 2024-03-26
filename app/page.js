@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-const pathname = usePathname();
+  const pathname = usePathname();
   const { user } = UserAuth();
 
   useEffect(() => {
@@ -21,10 +21,10 @@ const pathname = usePathname();
   }, []);
 
   useEffect(() => {
-  if(pathname === "/"){
-    router.push("/dashboard/personalfeed")
-  }
-  }, []);
+    if (pathname === "/") {
+      router.push("/dashboard/personalfeed");
+    }
+  }, [pathname]);
 
   return (
     <main>

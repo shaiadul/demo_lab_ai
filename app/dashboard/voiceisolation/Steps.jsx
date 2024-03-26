@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { TiTick } from "react-icons/ti";
-import ImageUpload from "./ImageUpload";
+import ImageUpload from "./fileUpload";
 
 const Steps = () => {
   const steps = ["Upload", "Processing", "Finish"];
