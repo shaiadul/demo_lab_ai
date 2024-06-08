@@ -53,13 +53,13 @@ body {
 /*--------------------------------------- */
 .border_gradient_purple {
   border: 5px solid;
-  border-image: linear-gradient(270deg, #743ad5, #d53a9d) 1;
+  border-image: linear-gradient(270deg, #4D93F6, #d53a9d) 1;
   /* border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
   border-image-slice: 1; */
 }
 .border_gradient {
   border: 3px solid;
-  border-image: linear-gradient(270deg, #743ad5, #d53a9d) 1;
+  border-image: linear-gradient(270deg, #4D93F6, #d53a9d) 1;
   /* border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
   border-image-slice: 1; */
 }
@@ -68,7 +68,7 @@ body {
 ------------------------- */
 .switch_obj {
   --secondary-container: #743ad5;
-  --primary: #d53a9d;
+  --primary: #4D93F6;
   font-size: 17px;
   position: relative;
   width: 3.7em;
@@ -136,7 +136,7 @@ input[type="range"] {
   width: 100%;
   margin: 0 10px;
   -webkit-appearance: none;
-  background: linear-gradient(to right, #743ad5, #d53a9d);
+  background: linear-gradient(to right, #4D93F6, #d53a9d);
   height: 8px;
   border-radius: 5px;
 }
@@ -286,7 +286,7 @@ div .dot {
   @apply w-10 h-10 flex items-center justify-center z-10 relative bg-slate-700 rounded-full font-semibold text-white;
 }
 .active .step {
-  @apply bg-[#AA26B6];
+  @apply bg-[#4D93F6];
 }
 .complete .step {
   @apply bg-green-600;

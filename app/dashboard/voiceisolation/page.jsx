@@ -21,7 +21,7 @@ const Page = () => {
   return (
     <section className="mx-5 my-10">
       <div className="flex justify-center">
-        <span className="text-2xl md:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#FD5261] to-[#AA26B6]">
+        <span className="text-2xl md:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
           Voice Isolation & Music Separation
         </span>
       </div>
@@ -32,7 +32,7 @@ const Page = () => {
         </p>
       </div>
       <Steps />
-      <MusicPlayer />
+      <MusicPlayer src="https://file-examples.com/storage/fe4e1227086659fa1a24064/2017/11/file_example_MP3_700KB.mp3" />
     </section>
   );
 };

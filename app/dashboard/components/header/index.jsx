@@ -10,16 +10,19 @@ import {
   faSignIn,
   faSignOut,
   faVideo,
+  faVoicemail,
   faWaterLadder,
   faX,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import logo from "@/public/assets/images/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const HeaderDashboard = () => {
   const [showDiv, setShowDiv] = useState(false);
@@ -29,7 +32,7 @@ const HeaderDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
-
+  const pathname = usePathname();
   const handleGoogleSignOut = async () => {
     try {
       await logOut();
@@ -52,16 +55,6 @@ const HeaderDashboard = () => {
 
   const handleSignOut = async () => {
     try {
-      // const response = await fetch(
-      //   "https://api.shardmind.io/api/v1/auth/logout",
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       toast("Successfully logged out", {
@@ -91,21 +84,16 @@ const HeaderDashboard = () => {
   // ---------------------------
   const variants = {
     open: { opacity: 1, x: 0 },
-    closed: { opacity: 0, x: "100%",},
+    closed: { opacity: 0, x: "100%" },
   };
 
   return (
     <div className=" w-full flex items-center justify-between h-16 fixed z-20 bg-[#0c051f]">
       <div className="flex items-center justify-center pl-3 border-none">
         <Link href="/dashboard/personalfeed">
-          <img
-            className="hidden md:block object-contain md:h-10 w-fit"
-            src="https://i.ibb.co/ZY7Jvzk/logo2.png"
-            alt="logo"
-          />
-          <img
-            className="md:hidden object-contain h-10 w-10"
-            src="https://i.ibb.co/Wtdt1JQ/Shardmindlogo.png"
+          <Image
+            className=" object-contain md:h-10 w-36 md:w-fit"
+            src={logo}
             alt="logo"
           />
         </Link>
@@ -222,11 +210,11 @@ const HeaderDashboard = () => {
               )}
             </motion.div>
           </li>
-          <li>
+          <li className="md:hidden">
             <FontAwesomeIcon
               onClick={() => setShowAside(!showAside)}
               icon={showAside ? faXmark : faBars}
-              className="text-white hover:text-pink-500 w-5 h-5 ml-4 block md:hidden "
+              className="text-white hover:text-pink-500 w-5 h-5 ml-4"
             />
             {/* show aside */}
             <div
@@ -255,65 +243,25 @@ const HeaderDashboard = () => {
                     </li>
                     <li>
                       <Link
-                        href="/dashboard/backgroundremoval"
-                        className={`focus-within:bg-slate-600 relative flex flex-row items-center h-11 focus:outline-none  text-white-600 hover:text-white-800 pr-6 rounded-md`}
+                        href="/dashboard/voiceisolation"
+                        className={`${
+                          pathname == "/dashboard/voiceisolation"
+                            ? "bg-[#1b1c20]"
+                            : ""
+                        } relative flex flex-row items-center h-11 focus:outline-none  text-white-600 hover:text-white-800 pr-6 rounded-md`}
                       >
                         <span className="inline-flex justify-center items-center ml-4">
                           <FontAwesomeIcon
-                            icon={faImage}
-                            className="text-[#C61FA2] w-5 h-5"
+                            icon={faVoicemail}
+                            className={` w-5 h-5 ${
+                              pathname == "/dashboard/personalfeed"
+                                ? "text-gray"
+                                : "text-white"
+                            }`}
                           />
                         </span>
-                        <span className="ml-2 text-md tracking-wide truncate">
-                          Background Removal
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/dashboard/watermarkremoval"
-                        className={`focus-within:bg-slate-600 relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
-                      >
-                        <span className="inline-flex justify-center items-center ml-4">
-                          <FontAwesomeIcon
-                            icon={faWaterLadder}
-                            className="text-[#C61FA2] w-5 h-5"
-                          />
-                        </span>
-                        <span className="ml-2 text-md tracking-wide truncate">
-                          Watermark Removal
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/dashboard/objectremoval"
-                        className={`focus-within:bg-slate-600 relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
-                      >
-                        <span className="inline-flex justify-center items-center ml-4">
-                          <FontAwesomeIcon
-                            icon={faObjectGroup}
-                            className="text-[#C61FA2] w-5 h-5"
-                          />
-                        </span>
-                        <span className="ml-2 text-md tracking-wide truncate">
-                          Object Removal
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/dashboard/videosegmentation"
-                        className={`focus-within:bg-slate-600 relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
-                      >
-                        <span className="inline-flex justify-center items-center ml-4">
-                          <FontAwesomeIcon
-                            icon={faVideo}
-                            className="text-[#C61FA2] w-5 h-5"
-                          />
-                        </span>
-                        <span className="ml-2 text-md tracking-wide truncate">
-                          Video Segmentation
+                        <span className="ml-2 text-md font-semibold tracking-wide truncate">
+                          Voice Isolation
                         </span>
                       </Link>
                     </li>

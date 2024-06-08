@@ -1,70 +1,110 @@
-import AudioPlayer from "react-modern-audio-player";
+import React, { useState, useRef, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause, faStop } from "@fortawesome/free-solid-svg-icons";
 
-export const playList = [
-  {
-    name: "music - 1",
-    writer: "react-modern-audio-player",
-    img: "https://cdn.pixabay.com/photo/2021/11/04/05/33/dome-6767422_960_720.jpg",
-    src: "https://cdn.pixabay.com/audio/2022/08/23/audio_d16737dc28.mp3",
-    id: 1,
-  },
-  {
-    name: "music - 2",
-    writer: "react-modern-audio-player",
-    img: "https://cdn.pixabay.com/photo/2021/09/06/16/45/nature-6602056__340.jpg",
-    src: "https://cdn.pixabay.com/audio/2022/08/04/audio_2dde668d05.mp3",
-    id: 2,
-  },
-  {
-    name: "music - 3",
-    writer: "react-modern-audio-player",
-    img: "https://cdn.pixabay.com/photo/2022/08/29/08/47/sky-7418364__340.jpg",
-    src: "https://cdn.pixabay.com/audio/2022/08/03/audio_54ca0ffa52.mp3",
-    id: 3,
-  },
-  {
-    name: "music - 4",
-    writer: "react-modern-audio-player",
-    img: "https://cdn.pixabay.com/photo/2015/09/22/01/30/lights-951000__340.jpg",
-    src: "https://cdn.pixabay.com/audio/2022/07/25/audio_3266b47d61.mp3",
-    id: 4,
-  },
-  {
-    name: "music - 5",
-    writer: "react-modern-audio-player",
-    img: "https://cdn.pixabay.com/photo/2022/08/28/18/03/dog-7417233__340.jpg",
-    src: "https://cdn.pixabay.com/audio/2022/08/02/audio_884fe92c21.mp3",
-    id: 5,
-  },
-];
+const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+};
 
-export default function MusicPlayer() {
+const MusicPlayer = ({ src }) => {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const updateTime = () => setCurrentTime(audio.currentTime);
+      const setAudioDuration = () => {
+        setDuration(audio.duration);
+        setCurrentTime(audio.currentTime); 
+      };
+
+      audio.addEventListener("timeupdate", updateTime);
+      audio.addEventListener("loadedmetadata", setAudioDuration);
+
+      return () => {
+        audio.removeEventListener("timeupdate", updateTime);
+        audio.removeEventListener("loadedmetadata", setAudioDuration);
+      };
+    }
+  }, []);
+
+  const playPause = () => {
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const stop = () => {
+    const audio = audioRef.current;
+    audio.pause();
+    audio.currentTime = 0;
+    setIsPlaying(false);
+  };
+
+  const changeCurrentTime = (e) => {
+    const time = parseFloat(e.target.value);
+    audioRef.current.currentTime = time;
+    setCurrentTime(time);
+  };
+
   return (
-    <main className="w-full">
-      <AudioPlayer
-        playList={playList}
-        audioInitialState={{
-          muted: true,
-          volume: 0.2,
-          curPlayId: 1,
-        }}
-        placement={{
-          interface: {
-            templateArea: {
-              trackTimeDuration: "row1-5",
-              progress: "row1-4",
-              playButton: "row1-6",
-              repeatType: "row1-7",
-              volume: "row1-8",
-            },
-          },
-          player: "bottom-right",
-        }}
-        activeUI={{
-          all: true,
-          progress: "waveform",
-        }}
-      />
-    </main>
+    <div className="my-10">
+      <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
+        <img
+          className="rounded-full"
+          src="https://chillhop.com/wp-content/uploads/2020/07/ff35dede32321a8aa0953809812941bcf8a6bd35-1024x1024.jpg"
+          alt="music-icon"
+        />
+      </div>
+      <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
+        Vacation Music
+      </h2>
+      <p className="text-md font-semibold font-serif text-center mb-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
+        Aso, Middle School, Aviino
+      </p>
+      <audio ref={audioRef} src={src}></audio>
+
+      <div className="flex justify-center items-center my-4 space-x-4">
+        <span className="font-serif font-semibold">
+          0.00
+        </span>
+
+        <input
+          type="range"
+          min="0"
+          max={
+            duration ? Math.floor(duration) : "0"
+          }
+          value={
+            currentTime ? Math.floor(currentTime) : "0"
+          }
+          onChange={changeCurrentTime}
+          className="w-full max-w-lg h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+        <span className="font-serif font-semibold">{formatTime(currentTime)}</span>
+      </div>
+      <div className="flex justify-center space-x-4 my-4">
+        <button
+          onClick={playPause}
+          className="focus:outline-none text-[#4D93F6]"
+        >
+          <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} size="2x" />
+        </button>
+        <button onClick={stop} className="focus:outline-none text-[#4D93F6]">
+          <FontAwesomeIcon icon={faStop} size="2x" />
+        </button>
+      </div>
+    </div>
   );
-}
+};
+
+export default MusicPlayer;
