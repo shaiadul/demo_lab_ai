@@ -228,15 +228,29 @@ const HeaderDashboard = () => {
                     <li>
                       <Link
                         href="/dashboard/personalfeed"
-                        className={`focus-within:bg-slate-600 relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
+                        className={` ${
+                          pathname == "/dashboard/personalfeed"
+                            ? "bg-[#1b1c20]"
+                            : ""
+                        } relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
                       >
                         <span className="inline-flex justify-center items-center ml-4">
                           <FontAwesomeIcon
                             icon={faHome}
-                            className="text-[#C61FA2] w-5 h-5"
+                            className={` w-5 h-5 ${
+                              pathname == "/dashboard/personalfeed"
+                                ? "text-[#4D93F6]"
+                                : "text-gray"
+                            }`}
                           />
                         </span>
-                        <span className="ml-2 text-md tracking-wide truncate">
+                        <span
+                          className={`ml-2 text-md font-semibold tracking-wide truncate ${
+                            pathname == "/dashboard/personalfeed"
+                              ? "bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]"
+                              : ""
+                          }`}
+                        >
                           Personal Feed
                         </span>
                       </Link>
@@ -248,19 +262,25 @@ const HeaderDashboard = () => {
                           pathname == "/dashboard/voiceisolation"
                             ? "bg-[#1b1c20]"
                             : ""
-                        } relative flex flex-row items-center h-11 focus:outline-none  text-white-600 hover:text-white-800 pr-6 rounded-md`}
+                        } relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
                       >
                         <span className="inline-flex justify-center items-center ml-4">
                           <FontAwesomeIcon
                             icon={faVoicemail}
                             className={` w-5 h-5 ${
-                              pathname == "/dashboard/personalfeed"
-                                ? "text-gray"
-                                : "text-white"
+                              pathname == "/dashboard/voiceisolation"
+                                ? "text-[#4D93F6]"
+                                : "text-gray"
                             }`}
                           />
                         </span>
-                        <span className="ml-2 text-md font-semibold tracking-wide truncate">
+                        <span
+                          className={`ml-2 text-md font-semibold tracking-wide truncate ${
+                            pathname == "/dashboard/voiceisolation"
+                              ? "bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]"
+                              : ""
+                          }`}
+                        >
                           Voice Isolation
                         </span>
                       </Link>

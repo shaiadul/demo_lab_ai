@@ -1,6 +1,13 @@
+"use client";
 import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faStop } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlay,
+  faPause,
+  faStop,
+  faVolumeMute,
+  faVolumeHigh,
+} from "@fortawesome/free-solid-svg-icons";
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -20,7 +27,6 @@ const MusicPlayer = ({ src }) => {
       const updateTime = () => setCurrentTime(audio.currentTime);
       const setAudioDuration = () => {
         setDuration(audio.duration);
-        setCurrentTime(audio.currentTime); 
       };
 
       audio.addEventListener("timeupdate", updateTime);
@@ -48,6 +54,7 @@ const MusicPlayer = ({ src }) => {
     audio.pause();
     audio.currentTime = 0;
     setIsPlaying(false);
+    setCurrentTime(0);
   };
 
   const changeCurrentTime = (e) => {
@@ -56,11 +63,23 @@ const MusicPlayer = ({ src }) => {
     setCurrentTime(time);
   };
 
+  const muteSound = () => {
+    const audio = audioRef.current;
+    audio.volume = 0;
+  };
+
+  const unmuteSound = () => {
+    const audio = audioRef.current;
+    audio.volume = 1;
+  };
+  
   return (
     <div className="my-10">
       <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
         <img
-          className="rounded-full"
+          className={`rounded-full ${
+            isPlaying ? "animate-pulse duration-300" : ""
+          }`}
           src="https://chillhop.com/wp-content/uploads/2020/07/ff35dede32321a8aa0953809812941bcf8a6bd35-1024x1024.jpg"
           alt="music-icon"
         />
@@ -74,33 +93,48 @@ const MusicPlayer = ({ src }) => {
       <audio ref={audioRef} src={src}></audio>
 
       <div className="flex justify-center items-center my-4 space-x-4">
-        <span className="font-serif font-semibold">
-          0.00
-        </span>
+        <span className="font-serif font-semibold">{formatTime(duration)}</span>
 
         <input
           type="range"
           min="0"
-          max={
-            duration ? Math.floor(duration) : "0"
-          }
-          value={
-            currentTime ? Math.floor(currentTime) : "0"
-          }
+          max={duration ? Math.floor(duration) : "0"}
+          value={currentTime ? Math.floor(currentTime) : "0"}
           onChange={changeCurrentTime}
           className="w-full max-w-lg h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         />
-        <span className="font-serif font-semibold">{formatTime(currentTime)}</span>
+        <span className="font-serif font-semibold">
+          {formatTime(currentTime)}
+        </span>
       </div>
       <div className="flex justify-center space-x-4 my-4">
         <button
+          type="button"
           onClick={playPause}
           className="focus:outline-none text-[#4D93F6]"
         >
           <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} size="2x" />
         </button>
-        <button onClick={stop} className="focus:outline-none text-[#4D93F6]">
+        <button
+          type="button"
+          onClick={stop}
+          className="focus:outline-none text-[#4D93F6]"
+        >
           <FontAwesomeIcon icon={faStop} size="2x" />
+        </button>
+        <button
+          type="button"
+          onClick={muteSound}
+          className="focus:outline-none text-[#4D93F6]"
+        >
+          <FontAwesomeIcon icon={faVolumeMute} size="2x" />
+        </button>
+        <button
+          type="button"
+          onClick={unmuteSound}
+          className="focus:outline-none text-[#4D93F6]"
+        >
+          <FontAwesomeIcon icon={faVolumeHigh} size="2x" />
         </button>
       </div>
     </div>

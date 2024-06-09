@@ -32,9 +32,16 @@ const Page = () => {
         </p>
       </div>
       <Steps />
-      <MusicPlayer src="https://file-examples.com/storage/fe4e1227086659fa1a24064/2017/11/file_example_MP3_700KB.mp3" />
+      <MusicPlayer src="http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/win.ogg" />
     </section>
   );
 };
 
 export default Page;
+
+
+
+// some link for testing: 
+// http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/fx/engine-4.ogg
+// http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race1.ogg
+// http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/lose.ogg
