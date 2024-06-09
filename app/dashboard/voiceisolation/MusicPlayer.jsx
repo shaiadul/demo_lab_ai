@@ -20,6 +20,7 @@ const MusicPlayer = ({ src }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -66,13 +67,15 @@ const MusicPlayer = ({ src }) => {
   const muteSound = () => {
     const audio = audioRef.current;
     audio.volume = 0;
+    setVolume(0);
   };
 
   const unmuteSound = () => {
     const audio = audioRef.current;
     audio.volume = 1;
+    setVolume(1);
   };
-  
+
   return (
     <div className="my-10">
       <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
@@ -113,28 +116,32 @@ const MusicPlayer = ({ src }) => {
           onClick={playPause}
           className="focus:outline-none text-[#4D93F6]"
         >
-          <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} size="2x" />
+          <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} className="text-xl text-[#8071D4]"/>
         </button>
         <button
           type="button"
           onClick={stop}
           className="focus:outline-none text-[#4D93F6]"
         >
-          <FontAwesomeIcon icon={faStop} size="2x" />
+          <FontAwesomeIcon icon={faStop} className="text-xl text-[#8071D4]"/>
         </button>
         <button
           type="button"
           onClick={muteSound}
-          className="focus:outline-none text-[#4D93F6]"
+          className={`focus:outline-none text-[#4D93F6] ${
+            volume === 0 ? "hidden" : ""
+          }`}
         >
-          <FontAwesomeIcon icon={faVolumeMute} size="2x" />
+          <FontAwesomeIcon icon={faVolumeHigh} className="text-xl text-[#8071D4]"/>
         </button>
         <button
           type="button"
           onClick={unmuteSound}
-          className="focus:outline-none text-[#4D93F6]"
+          className={`focus:outline-none text-[#4D93F6] ${
+            volume === 1 ? "hidden" : ""
+          }`}
         >
-          <FontAwesomeIcon icon={faVolumeHigh} size="2x" />
+          <FontAwesomeIcon icon={faVolumeMute} className="text-xl text-[#8071D4]"/>
         </button>
       </div>
     </div>
