@@ -19,34 +19,50 @@ const PersonalFeed = () => {
     }
   }, []);
 
-  const preimages = [
-    "https://source.unsplash.com/random/300x300/?1",
-    "https://source.unsplash.com/random/300x300/?2",
-    "https://source.unsplash.com/random/300x300/?3",
-    "https://source.unsplash.com/random/300x300/?4",
-    "https://source.unsplash.com/random/300x300/?5",
-    "https://source.unsplash.com/random/300x300/?6",
-    "https://source.unsplash.com/random/300x300/?7",
-    "https://source.unsplash.com/random/300x300/?8",
-    "https://source.unsplash.com/random/300x300/?9",
-    "https://source.unsplash.com/random/300x300/?10",
-    "https://source.unsplash.com/random/300x300/?11",
-    "https://source.unsplash.com/random/300x300/?12",
-    "https://source.unsplash.com/random/300x300/?13",
-    "https://source.unsplash.com/random/300x300/?14",
-    "https://source.unsplash.com/random/300x300/?15",
-    "https://source.unsplash.com/random/300x300/?16",
-    "https://source.unsplash.com/random/300x300/?17",
-    "https://source.unsplash.com/random/300x300/?18",
-    "https://source.unsplash.com/random/300x300/?19",
-    "https://source.unsplash.com/random/300x300/?20",
-  ];
   return (
     <section className="mx-5 my-10">
+      <div class="relative  w-full h-36 bg-white rounded-lg shadow-lg overflow-hidden mb-32">
+        <div class="absolute inset-0 rounded-lg overflow-hidden bg-red-200">
+          <img
+            src="https://images.unsplash.com/photo-1543794327-59a91fb815d1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=200&q=80"
+            alt=""
+          />
+          <div class="absolute inset-0 backdrop backdrop-blur-10 bg-gradient-to-b from-transparent to-black"></div>
+        </div>
+        <div class="absolute flex space-x-6 transform translate-x-6 translate-y-8">
+          <div class="w-36 h-36 rounded-lg shadow-lg overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1543794327-59a91fb815d1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
+              alt=""
+            />
+          </div>
+          <div class="text-white pt-12">
+            <h3 class="font-bold">Album</h3>
+            <div class="text-sm opacity-60">Super Interpret</div>
+            <div class="mt-8 text-gray-400">
+              <div class="flex items-center space-x-2 text-xs">
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                </svg>
+                <span>Easy listening</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <motion.span
-        initial={{ opacity: 0, scale: 0.9, y: "100%"}}
+        initial={{ opacity: 0, scale: 0.9, y: "100%" }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.5}}
+        transition={{ duration: 1, delay: 0.5 }}
         className="bg-clip-text text-4xl font-bold text-transparent bg-gradient-to-r from-[#FD5261] to-[#AA26B6]"
       >
         Featured Model
@@ -57,29 +73,6 @@ const PersonalFeed = () => {
         <Offering />
         <Offering />
         <Offering />
-      </div>
-
-      <div className="mt-20 mb-10">
-        <motion.span 
-        initial={{ opacity: 0, y: "100%" }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="bg-clip-text text-4xl font-bold text-transparent bg-gradient-to-r from-[#FD5261] to-[#AA26B6]">
-          Recent Creations
-        </motion.span>
-        <div className="my-10">
-          <div className="flex flex-col justify-center mx-auto">
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 sm:grid-cols-2">
-              {preimages.map((image, index) => (
-                <img
-                  key={index}
-                  className="object-cover w-full h-60 aspect-square grayscale hover:filter-none duration-500"
-                  src={image}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
