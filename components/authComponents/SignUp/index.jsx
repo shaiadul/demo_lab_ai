@@ -13,6 +13,9 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { user, googleSignIn } = UserAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [massage, setMassage] = useState("");
 
   const router = useRouter();
 
