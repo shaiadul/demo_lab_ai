@@ -3,20 +3,24 @@ import { UserAuth } from "@/components/authprovider/AuthContext";
 import Animation from "@/components/animation";
 import Link from "next/link";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { user, googleSignIn } = UserAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [massage, setMassage] = useState("");
 
   const router = useRouter();
 
   const handleSignIn = async () => {
+    setError("");
+    setMassage("");
+    setLoading(true);
     try {
       const response = await fetch(
         "https://api.shardmind.io/api/v1/auth/user/signin",
@@ -34,24 +38,24 @@ const SignIn = () => {
 
       if (response.ok) {
         const data = await response.json();
+        setLoading(false);
+
         localStorage.setItem("token", data?.accessToken);
-        
-        Cookies.set('jwt', data?.accessToken, );
+
+        Cookies.set("jwt", data?.accessToken);
         localStorage.setItem("id", data?.user?._id);
-        
+
         localStorage.setItem("email", email);
-        toast("Successfully logged", {
-          theme: "dark",
-        });
+        setMassage("Successfully logged in");
         router.push("/dashboard/personalfeed");
       } else {
         const errorData = await response.json();
-        toast("Enter your valid email and password", {
-          theme: "dark",
-        });
+        setError("Invalid email or password");
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
+      setError("Invalid email or password");
     }
   };
 
@@ -62,12 +66,10 @@ const SignIn = () => {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      toast("Successfully logged in", {
-        theme: "dark",
-      });
+      setMassage("Successfully logged in");
       router.push("/dashboard/personalfeed");
     } catch (error) {
-      console.log(error);
+      setError("Invalid email or password");
     }
   };
   return (
@@ -143,6 +145,11 @@ const SignIn = () => {
                 </div>
               </div>
 
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+              {massage && (
+                <div className="text-green-500 text-sm">{massage}</div>
+              )}
+
               <div className="flex items-center justify-between">
                 <div className="text-sm ml-auto">
                   <Link
@@ -158,7 +165,7 @@ const SignIn = () => {
                   onClick={handleSignIn}
                   className="w-full flex justify-center btn_color_gradient hover:opacity-80 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500"
                 >
-                  Sign in
+                  {loading ? "Loading..." : "Sign In"}
                 </button>
               </div>
               <div className="flex items-center justify-center space-x-2 my-5">
@@ -201,7 +208,6 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

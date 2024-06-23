@@ -5,6 +5,9 @@ import React, { useState } from "react";
 const ForgotPassword = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [massage, setMassage] = useState("");
 
   const toggleNewPassword = () => {
     setShowNewPassword(!showNewPassword);
@@ -12,6 +15,7 @@ const ForgotPassword = () => {
   const toggleConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
+
   return (
     <section className="container mx-auto">
       <div className="bg-[#0C051F] absolute top-0 left-0 bottom-0 leading-5 h-full w-full overflow-hidden"></div>
@@ -85,12 +89,17 @@ const ForgotPassword = () => {
                 </div>
               </div>
 
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+              {massage && (
+                <div className="text-green-500 text-sm">{massage}</div>
+              )}
+
               <div>
                 <button
                   type="submit"
                   className="w-full flex justify-center btn_color_gradient hover:opacity-80 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500"
                 >
-                  Confirm Password
+                  {loading ? "Loading..." : "Confirm Password"}
                 </button>
               </div>
             </div>

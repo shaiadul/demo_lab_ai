@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import Animation from "@/components/animation";
 import Link from "next/link";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { UserAuth } from "@/components/authprovider/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +18,9 @@ const SignUp = () => {
   const router = useRouter();
 
   const handleSignUp = async () => {
+    setError("");
+    setMassage("");
+    setLoading(true);
     try {
       const data = {
         username,
@@ -38,19 +39,18 @@ const SignUp = () => {
         }
       );
       if (response.ok) {
-        toast("Please check your email", {
-          theme: "dark",
-        });
+        setMassage("Successfully registered");
+        setLoading(false);
         localStorage.setItem("email", email);
         localStorage.setItem("username", username);
         router.push("/authentication/otp");
       } else {
-        toast(`Something went wrong!`, {
-          theme: "dark",
-        });
+        setError("Invalid credentials");
+        setLoading(false);
       }
     } catch (error) {
-      console.error("Error:", error);
+      setError("Invalid credentials");
+      setLoading(false);
     }
   };
 
@@ -59,14 +59,13 @@ const SignUp = () => {
   };
 
   const handleGoogleSignIn = async () => {
+    setError("");
     try {
       await googleSignIn();
-      toast("Successfully logged in", {
-        theme: "dark",
-      });
+      setMassage("Successfully logged in");
       router.push("/dashboard/personalfeed");
     } catch (error) {
-      console.log(error);
+      setError("Invalid credentials");
     }
   };
   return (
@@ -90,12 +89,12 @@ const SignUp = () => {
               <h3 className="font-semibold text-2xl text-gray-800">Sign Up </h3>
               <p className="text-gray-400">
                 Already have an account?{" "}
-                <a
+                <Link
                   href="/authentication/signin"
                   className="text-[15px] font-bold text-black hover:opacity-75"
                 >
                   Sign in
-                </a>
+                </Link>
               </p>
             </div>
             <div className="space-y-6 text-gray-400">
@@ -151,6 +150,11 @@ const SignUp = () => {
                 </div>
               </div>
 
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+              {massage && (
+                <div className="text-green-500 text-sm">{massage}</div>
+              )}
+
               <div className="flex items-center justify-between">
                 <div className="text-sm ml-auto">
                   <Link
@@ -166,7 +170,7 @@ const SignUp = () => {
                   onClick={handleSignUp}
                   className="w-full flex justify-center btn_color_gradient hover:opacity-80 text-gray-100 p-3 rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500"
                 >
-                  Sign Up
+                  {loading ? "Loading..." : "Sign Up"}
                 </button>
               </div>
               <div className="flex items-center justify-center space-x-2 my-5">
@@ -209,7 +213,6 @@ const SignUp = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

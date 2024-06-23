@@ -3,31 +3,27 @@
 import Animation from "@/components/animation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const OtpVerify = () => {
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
   const [email, setEmail] = useState("example@gmail.com");
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const [otp, setOtp] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [massage, setMassage] = useState("");
 
   const router = useRouter();
 
-  
-
   const handleOtpChange = (index, value) => {
-    // Update the OTP value
     const newOtpValues = [...otpValues];
     newOtpValues[index] = value;
     setOtpValues(newOtpValues);
 
-    // Move focus to the next input field
     if (index < inputRefs.length - 1 && value !== "") {
       inputRefs[index + 1].current.focus();
     }
 
-    // Log the 4-digit OTP value to the console
     const otpString = newOtpValues.join("");
     if (otpString.length === 4) {
       setOtp(otpString);
@@ -35,6 +31,9 @@ const OtpVerify = () => {
   };
 
   const verifyOtp = async () => {
+    setError("");
+    setMassage("");
+    setLoading(true);
     try {
       const response = await fetch(
         "https://api.shardmind.io/api/v1/auth/otp/verify",
@@ -51,17 +50,15 @@ const OtpVerify = () => {
       );
 
       if (response.ok) {
-        toast(`OTP verification successful !`, {
-          theme: "dark",
-        });
+        setMassage("OTP verified successfully!");
         router.push("/authentication/signin");
       } else {
-        toast.error(`Please input valid otp! if any issues click Resend OTP`, {
-          theme: "dark",
-        });
+        setError("Invalid OTP, please try again!");
+        setLoading(false);
       }
     } catch (error) {
-      console.error("Error:", error);
+      setError("Something went wrong!");
+      setLoading(false);
     }
   };
 
@@ -81,73 +78,20 @@ const OtpVerify = () => {
       );
 
       if (response.ok) {
-        toast(`OTP resend successful !`, {
-          theme: "dark",
-        });
+        setMassage("OTP sent successfully!");
       } else {
-        toast(`Something went wrong !`, {
-          theme: "dark",
-        });
+        setError("Something went wrong!");
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  // const expireOtp = async () => {
-  //   try {
-  //     if (typeof window !== "undefined") {
-  //       const { localStorage } = window
-  //       const lastCallTime = localStorage.getItem("lastCallTime");
-  //       const currentTime = new Date().getTime();
-
-  //       // Check if at least 2 minutes have passed since the last call
-  //       if (!lastCallTime || currentTime - lastCallTime > 2 * 60 * 1000) {
-  //         const response = await fetch(
-  //           "https://api.shardmind.io/api/v1/auth/otp/expire",
-  //           {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             body: JSON.stringify({
-  //               email: email,
-  //             }),
-  //           }
-  //         );
-
-  //         if (response.ok) {
-  //           toast(`OTP expired, click resent!`, {
-  //             theme: "dark",
-  //           });
-
-  //           // Update the last call time in localStorage
-  //           localStorage.setItem("lastCallTime", currentTime);
-  //           // Schedule the next call after 2 minutes
-  //           setTimeout(expireOtp, 2 * 60 * 1000);
-  //         } else {
-  //           toast(`Something went wrong!`, {
-  //             theme: "dark",
-  //           });
-  //         }
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
-
   // useEffect(() => {
-  //   setComponentMounted(true);
-
-  //   if (componentMounted) {
-  //     expireOtp();
-
-  //     const intervalId = setInterval(expireOtp, 2 * 60 * 1000);
-
-  //     return () => clearInterval(intervalId);
-  //   }
-  // }, [componentMounted]);
+  //   setInterval(() => {
+  //     setError("OTP expired, please resend!");
+  //   }, 20000);
+  // }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -206,20 +150,23 @@ const OtpVerify = () => {
                 </span>
               </div>
 
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+              {massage && (
+                <div className="text-green-500 text-sm">{massage}</div>
+              )}
+
               <div>
                 <button
                   onClick={verifyOtp}
                   className="w-full flex justify-center btn_color_gradient hover:opacity-80 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500"
                 >
-                  Confirm
+                  {loading ? "Loading..." : "Verify"}
                 </button>
               </div>
             </div>
-           
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

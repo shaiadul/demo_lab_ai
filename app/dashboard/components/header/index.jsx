@@ -1,6 +1,5 @@
 "use client";
 import { UserAuth } from "@/components/authprovider/AuthContext";
-import { faImage, faObjectGroup } from "@fortawesome/free-regular-svg-icons";
 import { motion } from "framer-motion";
 import {
   faBars,
@@ -11,10 +10,6 @@ import {
   faRadio,
   faSignIn,
   faSignOut,
-  faVideo,
-  faVoicemail,
-  faWaterLadder,
-  faX,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,8 +17,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import logo from "@/public/assets/images/logo.png";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 
 const HeaderDashboard = () => {
@@ -38,9 +31,7 @@ const HeaderDashboard = () => {
   const handleGoogleSignOut = async () => {
     try {
       await logOut();
-      toast("Successfully logged out", {
-        theme: "dark",
-      });
+
       router.push("/authentication/signin");
     } catch (error) {
       console.log(error);
@@ -59,9 +50,7 @@ const HeaderDashboard = () => {
     try {
       localStorage.removeItem("token");
       localStorage.removeItem("email");
-      toast("Successfully logged out", {
-        theme: "dark",
-      });
+
       router.push("/authentication/signin");
     } catch (error) {
       console.error("Error:", error);
@@ -323,7 +312,6 @@ const HeaderDashboard = () => {
             </div>
           </li>
         </ul>
-        <ToastContainer />
       </div>
     </div>
   );
