@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import {
   faBars,
   faGear,
+  faHeadphonesAlt,
   faHeadphonesSimple,
   faHome,
   faQuestion,
@@ -18,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import logo from "@/public/assets/images/logo.png";
 import Image from "next/image";
+import { faConnectdevelop } from "@fortawesome/free-brands-svg-icons";
 
 const HeaderDashboard = () => {
   const [showDiv, setShowDiv] = useState(false);
@@ -298,6 +300,36 @@ const HeaderDashboard = () => {
                         <span
                           className={`ml-2 text-md font-semibold tracking-wide truncate ${
                             pathname == "/dashboard/createwithai"
+                              ? "bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]"
+                              : ""
+                          }`}
+                        >
+                          Voice Generate
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/dashboard/voiceconvertion"
+                        className={`${
+                          pathname == "/dashboard/voiceconvertion"
+                            ? "bg-[#1b1c20]"
+                            : ""
+                        } relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
+                      >
+                        <span className="inline-flex justify-center items-center ml-4">
+                          <FontAwesomeIcon
+                            icon={faConnectdevelop}
+                            className={` w-5 h-5 ${
+                              pathname == "/dashboard/voiceconvertion"
+                                ? "text-[#4D93F6]"
+                                : "text-gray"
+                            }`}
+                          />
+                        </span>
+                        <span
+                          className={`ml-2 text-md font-semibold tracking-wide truncate ${
+                            pathname == "/dashboard/voiceconvertion"
                               ? "bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]"
                               : ""
                           }`}
