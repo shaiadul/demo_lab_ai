@@ -78,7 +78,10 @@ const MusicPlayer = ({ src }) => {
 
   return (
     <div className="my-10">
-      <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
+
+{/* no need to show image or thumbed */}
+
+      {/* <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
         <img
           className={`rounded-full ${
             isPlaying ? "animate-pulse duration-300" : ""
@@ -86,7 +89,7 @@ const MusicPlayer = ({ src }) => {
           src="https://chillhop.com/wp-content/uploads/2020/07/ff35dede32321a8aa0953809812941bcf8a6bd35-1024x1024.jpg"
           alt="music-icon"
         />
-      </div>
+      </div> */}
       <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
         Vacation Music
       </h2>

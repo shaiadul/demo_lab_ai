@@ -4,6 +4,7 @@ import Steps from "./Steps";
 import MusicPlayer from "./MusicPlayer";
 import { useEffect } from "react";
 import { UserAuth } from "@/components/authprovider/AuthContext";
+import ModeSelect from "./ModeSelect";
 
 const Page = () => {
   const router = useRouter();
@@ -32,6 +33,7 @@ const Page = () => {
         </p>
       </div>
       <Steps />
+      <ModeSelect />
       <MusicPlayer src="http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/win.ogg" />
     </section>
   );
@@ -39,9 +41,7 @@ const Page = () => {
 
 export default Page;
 
-
-
-// some link for testing: 
+// some link for testing:
 // http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/fx/engine-4.ogg
 // http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race1.ogg
 // http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/lose.ogg
