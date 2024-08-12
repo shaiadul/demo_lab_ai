@@ -37,19 +37,19 @@ export default function ModeSelect() {
       <section className="">
         <div className="flex justify-center items-center mx-auto my-10">
           <button
-            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md"
+            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer"
             onClick={() => handleClick("Singers")}
           >
             <span>Singers</span>
           </button>
           <button
-            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md mx-10"
+            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer mx-10"
             onClick={() => handleClick("Funny")}
           >
             <span>Funny</span>
           </button>
           <button
-            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md"
+            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer"
             onClick={() => handleClick("Other")}
           >
             <span>Other</span>
@@ -61,7 +61,7 @@ export default function ModeSelect() {
             {data[selectedCategory].map((item) => (
               <div
                 key={item.id}
-                className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] shadow-lg rounded-lg p-5 m-2 w-1/4"
+                className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] shadow-lg rounded-lg p-5 m-2 w-1/4 cursor-pointer"
               >
                 <h3 className="font-bold ">{item.title}</h3>
                 <p>{item.description}</p>
