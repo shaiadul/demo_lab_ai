@@ -19,28 +19,28 @@ const PersonalFeed = () => {
 
   return (
     <section className="mx-5 my-10">
-      <div class="relative  w-full h-36 bg-white rounded-lg shadow-lg overflow-hidden mb-32">
-        <div class="absolute inset-0 rounded-lg overflow-hidden bg-red-200">
+      <div className="relative  w-full h-36 bg-white rounded-lg shadow-lg overflow-hidden mb-32">
+        <div className="absolute inset-0 rounded-lg overflow-hidden bg-red-200">
           <img
             src="https://images.unsplash.com/photo-1543794327-59a91fb815d1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=200&q=80"
             alt=""
           />
-          <div class="absolute inset-0 backdrop backdrop-blur-10 bg-gradient-to-b from-transparent to-black"></div>
+          <div className="absolute inset-0 backdrop backdrop-blur-10 bg-gradient-to-b from-transparent to-black"></div>
         </div>
-        <div class="absolute flex space-x-6 transform translate-x-6 translate-y-8">
-          <div class="w-36 h-36 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute flex space-x-6 transform translate-x-6 translate-y-8">
+          <div className="w-36 h-36 rounded-lg shadow-lg overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1543794327-59a91fb815d1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
               alt=""
             />
           </div>
-          <div class="text-white pt-12">
-            <h3 class="font-bold">Album</h3>
-            <div class="text-sm opacity-60">Super Interpret</div>
-            <div class="mt-8 text-gray-400">
-              <div class="flex items-center space-x-2 text-xs">
+          <div className="text-white pt-12">
+            <h3 className="font-bold">Album</h3>
+            <div className="text-sm opacity-60">Super Interpret</div>
+            <div className="mt-8 text-gray-400">
+              <div className="flex items-center space-x-2 text-xs">
                 <svg
-                  class="w-4 h-4"
+                  className="w-4 h-4"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
