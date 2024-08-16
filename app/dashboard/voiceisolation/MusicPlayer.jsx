@@ -76,27 +76,14 @@ const MusicPlayer = ({ url }) => {
     setVolume(1);
   };
 
-
   console.log("Single url", url);
-  
+
   return (
     <div className={`my-10 ${url ? "block" : "hidden"}`}>
-      {/* <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
-        <img
-          className={`rounded-full max-w-md ${
-            isPlaying ? "animate-pulse duration-300" : ""
-          }`}
-          src="https://png.pngtree.com/png-vector/20191113/ourmid/pngtree-link-chain-url-connection-link-abstract-circle-background-fl-png-image_1985250.jpg"
-          alt="music-icon"
-        />
-      </div>
-      <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
-        Vacation Music
-      </h2> */}
       <p className="text-md font-semibold font-serif text-center mb-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
         Aso, Middle School, Aviino
       </p>
-      <audio ref={audioRef} url={url}></audio>
+      <audio ref={audioRef} src={url}></audio>
 
       <div className="flex justify-center items-center my-4 space-x-4">
         <span className="font-serif font-semibold">{formatTime(duration)}</span>
@@ -161,3 +148,18 @@ const MusicPlayer = ({ url }) => {
 };
 
 export default MusicPlayer;
+
+{
+  /* <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
+        <img
+          className={`rounded-full max-w-md ${
+            isPlaying ? "animate-pulse duration-300" : ""
+          }`}
+          src="https://png.pngtree.com/png-vector/20191113/ourmid/pngtree-link-chain-url-connection-link-abstract-circle-background-fl-png-image_1985250.jpg"
+          alt="music-icon"
+        />
+      </div>
+      <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
+        Vacation Music
+      </h2> */
+}
