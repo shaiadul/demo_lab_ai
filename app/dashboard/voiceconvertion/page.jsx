@@ -33,8 +33,7 @@ const Page = () => {
         </p>
       </div>
       <Steps />
-      <ModeSelect />
-      <MusicPlayer src="http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/win.ogg" />
+      
     </section>
   );
 };

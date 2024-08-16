@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import MusicPlayer from "./MusicPlayer";
 
-export default function ModeSelect() {
+export default function ModeSelect({ url }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const data = {
@@ -31,6 +32,8 @@ export default function ModeSelect() {
   const handleClick = (category) => {
     setSelectedCategory(category);
   };
+
+ 
 
   return (
     <>
@@ -69,6 +72,8 @@ export default function ModeSelect() {
             ))}
           </div>
         )}
+
+        <MusicPlayer src="http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/win.ogg" />
       </section>
     </>
   );

@@ -43,9 +43,9 @@ const SignIn = () => {
         localStorage.setItem("token", data?.accessToken);
 
         Cookies.set("jwt", data?.accessToken);
-        localStorage.setItem("id", data?.user?._id);
+        localStorage.setItem("user", JSON.stringify(data));
+        console.log("data", data);
 
-        localStorage.setItem("email", email);
         setMassage("Successfully logged in");
         router.push("/dashboard/personalfeed");
       } else {
