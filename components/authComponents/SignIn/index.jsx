@@ -44,7 +44,7 @@ const SignIn = () => {
 
         Cookies.set("jwt", data?.accessToken);
         localStorage.setItem("user", JSON.stringify(data));
-        console.log("data", data);
+       
 
         setMassage("Successfully logged in");
         router.push("/dashboard/personalfeed");

@@ -15,7 +15,7 @@ const formatTime = (seconds) => {
   return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
 };
 
-const MusicPlayer = ({ src }) => {
+const MusicPlayer = ({ url }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -76,24 +76,27 @@ const MusicPlayer = ({ src }) => {
     setVolume(1);
   };
 
+
+  console.log("Single url", url);
+  
   return (
-    <div className="my-10">
-      <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
+    <div className={`my-10 ${url ? "block" : "hidden"}`}>
+      {/* <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
         <img
-          className={`rounded-full ${
+          className={`rounded-full max-w-md ${
             isPlaying ? "animate-pulse duration-300" : ""
           }`}
-          src="https://chillhop.com/wp-content/uploads/2020/07/ff35dede32321a8aa0953809812941bcf8a6bd35-1024x1024.jpg"
+          src="https://png.pngtree.com/png-vector/20191113/ourmid/pngtree-link-chain-url-connection-link-abstract-circle-background-fl-png-image_1985250.jpg"
           alt="music-icon"
         />
       </div>
       <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
         Vacation Music
-      </h2>
+      </h2> */}
       <p className="text-md font-semibold font-serif text-center mb-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
         Aso, Middle School, Aviino
       </p>
-      <audio ref={audioRef} src={src}></audio>
+      <audio ref={audioRef} url={url}></audio>
 
       <div className="flex justify-center items-center my-4 space-x-4">
         <span className="font-serif font-semibold">{formatTime(duration)}</span>
@@ -116,14 +119,17 @@ const MusicPlayer = ({ src }) => {
           onClick={playPause}
           className="focus:outline-none text-[#4D93F6]"
         >
-          <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon
+            icon={isPlaying ? faPause : faPlay}
+            className="text-xl text-[#8071D4]"
+          />
         </button>
         <button
           type="button"
           onClick={stop}
           className="focus:outline-none text-[#4D93F6]"
         >
-          <FontAwesomeIcon icon={faStop} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon icon={faStop} className="text-xl text-[#8071D4]" />
         </button>
         <button
           type="button"
@@ -132,7 +138,10 @@ const MusicPlayer = ({ src }) => {
             volume === 0 ? "hidden" : ""
           }`}
         >
-          <FontAwesomeIcon icon={faVolumeHigh} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon
+            icon={faVolumeHigh}
+            className="text-xl text-[#8071D4]"
+          />
         </button>
         <button
           type="button"
@@ -141,7 +150,10 @@ const MusicPlayer = ({ src }) => {
             volume === 1 ? "hidden" : ""
           }`}
         >
-          <FontAwesomeIcon icon={faVolumeMute} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon
+            icon={faVolumeMute}
+            className="text-xl text-[#8071D4]"
+          />
         </button>
       </div>
     </div>
