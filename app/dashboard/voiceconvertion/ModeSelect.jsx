@@ -114,48 +114,50 @@ export default function ModeSelect({ url, setComplete }) {
         <Loading />
       ) : (
         <section className="">
-          <div className="flex justify-center items-center mx-auto my-10">
-            {Object.keys(modeData).map((category) => (
-              <button
-                key={category}
-                className={`bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer mx-2 ${
-                  selectedCategory === category ? "border-2 border-white" : ""
-                }
+          <div className={`${playUrl ? "hidden" : ""}`}>
+            <div className="flex justify-center items-center mx-auto my-10">
+              {Object.keys(modeData).map((category) => (
+                <button
+                  key={category}
+                  className={`bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer mx-2 ${
+                    selectedCategory === category ? "border-2 border-white" : ""
+                  }
                    `}
-                onClick={() => handleClick(category)}
-              >
-                <span>{category}</span>
-              </button>
-            ))}
-          </div>
-
-          {selectedCategory && modeData[selectedCategory] && (
-            <div className="flex flex-wrap justify-center">
-              {modeData[selectedCategory].map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleItemClick(item)} // Handle item click
-                  className={`bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] shadow-lg rounded-lg p-5 m-2 w-1/4 cursor-pointer ${
-                    selectedItem === item ? "border-2 border-white" : ""
-                  }`}
+                  onClick={() => handleClick(category)}
                 >
-                  <h3 className="font-bold">{item}</h3>
-                </div>
+                  <span>{category}</span>
+                </button>
               ))}
             </div>
-          )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex justify-center items-center mx-auto my-10"
-          >
-            <button
-              type="submit"
-              className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer"
+            {selectedCategory && modeData[selectedCategory] && (
+              <div className="flex flex-wrap justify-center">
+                {modeData[selectedCategory].map((item, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleItemClick(item)} // Handle item click
+                    className={`bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] shadow-lg rounded-lg p-5 m-2 w-1/4 cursor-pointer ${
+                      selectedItem === item ? "border-2 border-white" : ""
+                    }`}
+                  >
+                    <h3 className="font-bold">{item}</h3>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <form
+              onSubmit={handleSubmit}
+              className="flex justify-center items-center mx-auto my-10"
             >
-              Submit
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] font-bold text-2xl px-10 py-2 rounded-md cursor-pointer border_gradient_purple"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
 
           <MusicPlayer playUrl={playUrl} />
         </section>

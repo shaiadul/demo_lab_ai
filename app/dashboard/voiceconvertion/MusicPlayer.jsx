@@ -90,11 +90,8 @@ const MusicPlayer = ({ playUrl }) => {
         />
       </div> */}
       <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
-        Vacation Music
+        Converted Music
       </h2>
-      <p className="text-md font-semibold font-serif text-center mb-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
-        Aso, Middle School, Aviino
-      </p>
       <audio ref={audioRef} src={playUrl}></audio>
 
       <div className="flex justify-center items-center my-4 space-x-4">
