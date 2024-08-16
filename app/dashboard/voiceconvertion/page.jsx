@@ -1,10 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Steps from "./Steps";
-import MusicPlayer from "./MusicPlayer";
 import { useEffect } from "react";
 import { UserAuth } from "@/components/authprovider/AuthContext";
-import ModeSelect from "./ModeSelect";
+
 
 const Page = () => {
   const router = useRouter();

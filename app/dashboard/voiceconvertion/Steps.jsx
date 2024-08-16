@@ -4,7 +4,7 @@ import { TiTick } from "react-icons/ti";
 import ImageUpload from "./fileUpload";
 
 const Steps = () => {
-  const steps = ["Upload", "Processing", "Finish"];
+  const steps = ["Upload", "Selection", "Finish"];
   const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
   return (

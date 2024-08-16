@@ -1,80 +1,165 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MusicPlayer from "./MusicPlayer";
+import { fetchApi } from "@/utils/FetchApi";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import Loading from "@/components/loading/Loding";
 
-export default function ModeSelect({ url }) {
+export default function ModeSelect({ url, setComplete }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [modeData, setModeData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [playUrl, setPlayUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const data = {
-    Singers: [
-      { id: 1, title: "Singer 1", description: "Famous Singer 1" },
-      { id: 2, title: "Singer 2", description: "Famous Singer 2" },
-      { id: 3, title: "Singer 3", description: "Famous Singer 3" },
-      { id: 4, title: "Singer 4", description: "Famous Singer 4" },
-      { id: 5, title: "Singer 5", description: "Famous Singer 5" },
-    ],
-    Funny: [
-      { id: 1, title: "Funny 1", description: "Hilarious Clip 1" },
-      { id: 2, title: "Funny 2", description: "Hilarious Clip 2" },
-      { id: 3, title: "Funny 3", description: "Hilarious Clip 3" },
-      { id: 4, title: "Funny 4", description: "Hilarious Clip 4" },
-      { id: 5, title: "Funny 5", description: "Hilarious Clip 5" },
-    ],
-    Other: [
-      { id: 1, title: "Other 1", description: "Interesting Content 1" },
-      { id: 2, title: "Other 2", description: "Interesting Content 2" },
-      { id: 3, title: "Other 3", description: "Interesting Content 3" },
-      { id: 4, title: "Other 4", description: "Interesting Content 4" },
-      { id: 5, title: "Other 5", description: "Interesting Content 5" },
-    ],
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchApi("/list_vc_models", "GET");
+
+        if (data) {
+          setModeData(data);
+          setLoading(false);
+        } else {
+          console.error("Error fetching mode data");
+        }
+      } catch (error) {
+        console.error("Error fetching mode data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleClick = (category) => {
     setSelectedCategory(category);
   };
 
- 
+  const handleItemClick = (item) => {
+    setSelectedItem(item); // Store the selected item
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (!selectedItem || !selectedCategory) {
+      console.error("Please select a category and an item before submitting.");
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const authToken = user?.accessToken;
+    const userId = user?.user?._id;
+
+    const postData = {
+      ckpt_name: selectedItem,
+      model_type: selectedCategory,
+      url: url,
+      auth_token: authToken,
+      userId: userId,
+    };
+
+    console.log("Submitting voice conversion data:", postData);
+
+    try {
+      const response = await fetchApi("/voice_conversion", "POST", postData);
+
+      if (response) {
+        console.log("API response:", response);
+        setLoading(false);
+        setComplete(true);
+        readFile(response);
+      } else {
+        setLoading(false);
+        console.error("Error submitting voice conversion data");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error submitting voice conversion data:", error);
+    }
+  };
+
+  const readFile = async (fileKey) => {
+    setLoading(true);
+    const client = new S3Client({
+      region: "nyc3",
+      credentials: {
+        accessKeyId: "DO00E62JWRAHTAANAADR",
+        secretAccessKey: "Z5ICzGAlMg/7B3WTAUzAbPy9SX910ZrrVovadJjc98s",
+      },
+      endpoint: "https://nyc3.digitaloceanspaces.com",
+    });
+
+    const command = new GetObjectCommand({
+      Bucket: "shardmind.ai",
+      Key: fileKey,
+    });
+
+    try {
+      const url = await getSignedUrl(client, command, { expiresIn: 3600 });
+      console.log(url);
+      setPlayUrl(url);
+      setLoading(false);
+      return url; // The URL is valid for 1 hour
+    } catch (error) {
+      console.error("error from download", error);
+    }
+  };
 
   return (
     <>
-      <section className="">
-        <div className="flex justify-center items-center mx-auto my-10">
-          <button
-            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer"
-            onClick={() => handleClick("Singers")}
-          >
-            <span>Singers</span>
-          </button>
-          <button
-            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer mx-10"
-            onClick={() => handleClick("Funny")}
-          >
-            <span>Funny</span>
-          </button>
-          <button
-            className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer"
-            onClick={() => handleClick("Other")}
-          >
-            <span>Other</span>
-          </button>
-        </div>
-
-        {selectedCategory && (
-          <div className="flex flex-wrap justify-center">
-            {data[selectedCategory].map((item) => (
-              <div
-                key={item.id}
-                className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] shadow-lg rounded-lg p-5 m-2 w-1/4 cursor-pointer"
+      {loading ? (
+        <Loading />
+      ) : (
+        <section className="">
+          <div className="flex justify-center items-center mx-auto my-10">
+            {Object.keys(modeData).map((category) => (
+              <button
+                key={category}
+                className={`bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer mx-2 ${
+                  selectedCategory === category ? "border-2 border-white" : ""
+                }
+                   `}
+                onClick={() => handleClick(category)}
               >
-                <h3 className="font-bold ">{item.title}</h3>
-                <p>{item.description}</p>
-              </div>
+                <span>{category}</span>
+              </button>
             ))}
           </div>
-        )}
 
-        <MusicPlayer src="http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/win.ogg" />
-      </section>
+          {selectedCategory && modeData[selectedCategory] && (
+            <div className="flex flex-wrap justify-center">
+              {modeData[selectedCategory].map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleItemClick(item)} // Handle item click
+                  className={`bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] shadow-lg rounded-lg p-5 m-2 w-1/4 cursor-pointer ${
+                    selectedItem === item ? "border-2 border-white" : ""
+                  }`}
+                >
+                  <h3 className="font-bold">{item}</h3>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSubmit}
+            className="flex justify-center items-center mx-auto my-10"
+          >
+            <button
+              type="submit"
+              className="bg-gradient-to-r hover:bg-gradient-to-tr duration-700 from-[#4D93F6] to-[#AA26B6] px-10 py-3 rounded-md cursor-pointer"
+            >
+              Submit
+            </button>
+          </form>
+
+          <MusicPlayer playUrl={playUrl} />
+        </section>
+      )}
     </>
   );
 }

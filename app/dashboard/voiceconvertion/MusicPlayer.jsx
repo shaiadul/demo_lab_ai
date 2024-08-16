@@ -15,7 +15,7 @@ const formatTime = (seconds) => {
   return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
 };
 
-const MusicPlayer = ({ src }) => {
+const MusicPlayer = ({ playUrl }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -77,9 +77,8 @@ const MusicPlayer = ({ src }) => {
   };
 
   return (
-    <div className="my-10">
-
-{/* no need to show image or thumbed */}
+    <div className={`my-10 ${!playUrl ? "hidden" : "block"}`}>
+      {/* no need to show image or thumbed */}
 
       {/* <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
         <img
@@ -96,7 +95,7 @@ const MusicPlayer = ({ src }) => {
       <p className="text-md font-semibold font-serif text-center mb-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
         Aso, Middle School, Aviino
       </p>
-      <audio ref={audioRef} src={src}></audio>
+      <audio ref={audioRef} src={playUrl}></audio>
 
       <div className="flex justify-center items-center my-4 space-x-4">
         <span className="font-serif font-semibold">{formatTime(duration)}</span>
@@ -119,14 +118,17 @@ const MusicPlayer = ({ src }) => {
           onClick={playPause}
           className="focus:outline-none text-[#4D93F6]"
         >
-          <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon
+            icon={isPlaying ? faPause : faPlay}
+            className="text-xl text-[#8071D4]"
+          />
         </button>
         <button
           type="button"
           onClick={stop}
           className="focus:outline-none text-[#4D93F6]"
         >
-          <FontAwesomeIcon icon={faStop} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon icon={faStop} className="text-xl text-[#8071D4]" />
         </button>
         <button
           type="button"
@@ -135,7 +137,10 @@ const MusicPlayer = ({ src }) => {
             volume === 0 ? "hidden" : ""
           }`}
         >
-          <FontAwesomeIcon icon={faVolumeHigh} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon
+            icon={faVolumeHigh}
+            className="text-xl text-[#8071D4]"
+          />
         </button>
         <button
           type="button"
@@ -144,7 +149,10 @@ const MusicPlayer = ({ src }) => {
             volume === 1 ? "hidden" : ""
           }`}
         >
-          <FontAwesomeIcon icon={faVolumeMute} className="text-xl text-[#8071D4]"/>
+          <FontAwesomeIcon
+            icon={faVolumeMute}
+            className="text-xl text-[#8071D4]"
+          />
         </button>
       </div>
     </div>

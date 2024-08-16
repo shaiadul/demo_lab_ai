@@ -4,17 +4,17 @@ const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 export const fetchApi = async (path, method, data = null) => {
   const url = `${API_ENDPOINT}${path}`;
-  // const user = localStorage.getItem("user");
-  // const token = user ? JSON.parse(user).accessToken : "";
+  const user = localStorage.getItem("user");
+  const token = user ? JSON.parse(user).accessToken : "";
 
   try {
     let response;
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
     switch (method) {
       case "GET":

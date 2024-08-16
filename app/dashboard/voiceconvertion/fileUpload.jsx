@@ -58,7 +58,7 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
 
       {currentFileUrl ? (
         <>
-          <ModeSelect url={currentFileUrl} />
+          <ModeSelect url={currentFileUrl} setComplete={setComplete} />
         </>
       ) : (
         <label
