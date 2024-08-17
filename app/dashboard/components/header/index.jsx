@@ -11,6 +11,7 @@ import {
   faRadio,
   faSignIn,
   faSignOut,
+  faUpload,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -335,6 +336,36 @@ const HeaderDashboard = () => {
                           }`}
                         >
                           Voice Generate
+                        </span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/dashboard/featureupload"
+                        className={`${
+                          pathname == "/dashboard/featureupload"
+                            ? "bg-[#1b1c20]"
+                            : ""
+                        } relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 pr-6 rounded-md`}
+                      >
+                        <span className="inline-flex justify-center items-center ml-4">
+                          <FontAwesomeIcon
+                            icon={faUpload}
+                            className={` w-5 h-5 ${
+                              pathname == "/dashboard/featureupload"
+                                ? "text-[#4D93F6]"
+                                : "text-gray"
+                            }`}
+                          />
+                        </span>
+                        <span
+                          className={`ml-2 text-md font-semibold tracking-wide truncate ${
+                            pathname == "/dashboard/featureupload"
+                              ? "bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]"
+                              : ""
+                          }`}
+                        >
+                          Feature Upload
                         </span>
                       </Link>
                     </li>
