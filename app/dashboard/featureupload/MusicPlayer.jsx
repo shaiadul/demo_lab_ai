@@ -78,19 +78,8 @@ const MusicPlayer = ({ playUrl }) => {
 
   return (
     <div className={`my-10 ${!playUrl ? "hidden" : "block"}`}>
-      {/* no need to show image or thumbed */}
-
-      {/* <div className="flex mx-auto justify-center max-w-xs rounded-full object-cover">
-        <img
-          className={`rounded-full ${
-            isPlaying ? "animate-pulse duration-300" : ""
-          }`}
-          src="https://chillhop.com/wp-content/uploads/2020/07/ff35dede32321a8aa0953809812941bcf8a6bd35-1024x1024.jpg"
-          alt="music-icon"
-        />
-      </div> */}
       <h2 className="text-4xl font-semibold font-serif text-center my-5 bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6]">
-        Converted Music
+        Enjoy Your Amazing Music
       </h2>
       <audio ref={audioRef} src={playUrl}></audio>
 
