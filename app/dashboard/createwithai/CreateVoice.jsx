@@ -1,13 +1,13 @@
 "use client";
+import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
 
 export default function CreateVoice() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [voiceDescription, setVoiceDescription] = useState("");
   const [lyrics, setLyrics] = useState("");
-  const [isCustom, setIsCustom] = useState(false);
+  const [isInstrumental, setIsInstrumental] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -37,53 +37,77 @@ export default function CreateVoice() {
     return `${minutes}:${seconds}`;
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      prompt: lyrics,
+      make_instrumental: isInstrumental,
+      wait_audio: true,
+    };
+    console.log("data", data);
+
+    try {
+      const response = await axios.post(
+        "https://api.aimlapi.com/generate",
+        data
+      );
+
+      console.log("Voice generated:", response.data);
+    } catch (error) {
+      console.error("Error generating voice:", error);
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 justify-between items-end gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-3 justify-between items-center gap-5">
       <section className="">
-        <div className="flex justify-center items-center max-w-[180px] my-4">
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={isCustom}
-              onChange={() => setIsCustom(!isCustom)}
-            />
-            <span className="slider round"></span>
-          </label>
-          <span className="font-serif font-semibold text-lg ml-2">Custom</span>
-        </div>
-        <div className="relative p-5">
-          <h2 className="font-bold mb-1 text-gray-700 block">
-            Voice Description
-          </h2>
-          <textarea
-            rows="4"
-            maxLength="210"
-            value={voiceDescription}
-            onChange={(e) => setVoiceDescription(e.target.value)}
-            className="block w-full mt-1 py-2 px-3 rounded-md shadow-sm focus:outline-none bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white dark:bg-gray-800"
-          ></textarea>
-          <span className="absolute px-2 py-1 text-xs font-serif text-white bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] rounded right-5 bottom-5">
-            {210 - voiceDescription.length}
-          </span>
-        </div>
-        <div className="relative p-5">
-          <h2 className="font-bold mb-1 text-gray-700 block">Lyrics</h2>
-          <textarea
-            rows="4"
-            maxLength="210"
-            value={lyrics}
-            onChange={(e) => setLyrics(e.target.value)}
-            className="block w-full mt-1 py-2 px-3 rounded-md shadow-sm focus:outline-none bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white dark:bg-gray-800"
-          ></textarea>
-          <span className="absolute px-2 py-1 text-xs font-serif text-white bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] rounded right-5 bottom-5">
-            {210 - lyrics.length}
-          </span>
-        </div>
-        <div className="mx-5 mb-5">
-          <button className="bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] w-full text-white font-bold py-2 px-4 rounded-md mx-auto">
-            Create Voice
-          </button>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="flex justify-center items-center max-w-[220px] my-4">
+            <label className="switch">
+              <input
+                type="checkbox"
+                id="instrumental"
+                checked={isInstrumental}
+                onChange={() => setIsInstrumental(!isInstrumental)}
+              />
+              <span className="slider round"></span>
+            </label>
+            <span  className="font-serif font-semibold text-lg ml-2">
+              Instrumental
+            </span>
+          </div>
+
+          <div className="relative p-5">
+            <h2 className="font-bold mb-1 text-gray-700 block">Lyrics</h2>
+            <textarea
+              rows="8"
+              maxLength="600"
+              value={lyrics}
+              onChange={(e) => setLyrics(e.target.value)}
+              className="block w-full mt-1 py-2 px-3 rounded-md shadow-sm focus:outline-none bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white dark:bg-gray-800"
+            ></textarea>
+            <span className="absolute px-2 py-1 text-xs font-serif text-white bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] rounded right-5 bottom-5">
+              {600 - lyrics.length}
+            </span>
+          </div>
+
+          <div className="mx-5 mb-5">
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] w-full text-white font-bold py-2 px-4 rounded-md mx-auto"
+            >
+              Create Voice
+            </button>
+          </div>
+        </form>
+      </section>
+      <section className="bg-clip-text text-transparent bg-gradient-to-r from-[#4D93F6] to-[#AA26B6] text-xl font-serif font-bold text-center py-5 md:col-span-2 max-w-xl flex justify-center items-center mx-auto">
+        Our AI music generator simplifies the creative process, perfect for both
+        seasoned songwriters and beginners. Just write your lyrics—whether it’s
+        a love song, rap, or pop chorus—and let the AI handle any genre. You can
+        then choose to include an instrumental track or keep it vocal-only,
+        giving you complete control over your musical creation.
       </section>
       <section className="md:col-span-2 w-full p-5">
         <div className="max-w-full bg-gradient-to-r from-[#4d93f660] to-[#aa26b670] rounded-lg shadow-lg overflow-hidden">
@@ -106,9 +130,7 @@ export default function CreateVoice() {
                   width: `${(currentTime / duration) * 100}%`,
                   background: "linear-gradient(to right, #4D93F6, #AA26B6)",
                 }}
-              >
-                {/* <div className="rounded-full w-3 h-3 bg-white shadow"></div> */}
-              </div>
+              ></div>
             </div>
           </div>
           <div className="flex justify-between text-xs font-semibold text-gray-500 px-4 py-2">
