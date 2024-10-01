@@ -6,14 +6,22 @@ import React, { useEffect, useRef, useState } from "react";
 
 const OtpVerify = () => {
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
-  const [email, setEmail] = useState("example@gmail.com");
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [massage, setMassage] = useState("");
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (window !== undefined) {
+     const email = localStorage.getItem("email");
+     setEmail(email);
+    }
+  }, []);
+
 
   const handleOtpChange = (index, value) => {
     const newOtpValues = [...otpValues];
@@ -34,20 +42,18 @@ const OtpVerify = () => {
     setError("");
     setMassage("");
     setLoading(true);
+    const username = localStorage.getItem("username");
     try {
-      const response = await fetch(
-        "https://api.shardmind.io/api/v1/auth/otp/verify",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            otp: otp,
-          }),
-        }
-      );
+      const response = await fetch("https://api.demolab.app/otp/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          otp: otp,
+        }),
+      });
 
       if (response.ok) {
         setMassage("OTP verified successfully!");
@@ -113,12 +119,11 @@ const OtpVerify = () => {
               </h3>
               <p className="text-gray-400">
                 Code has been sent{" "}
-                <a
-                  mailto="mailto:example@gmail.com"
+                <span
                   className="text-[15px] text-black font-semibold hover:opacity-75"
                 >
                   {email}
-                </a>
+                </span>
               </p>
             </div>
             <div className="space-y-6 text-gray-400">

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { UserAuth } from "@/components/authprovider/AuthContext";
 import { useRouter } from "next/navigation";
 
-const SignUp = () => {
+const   SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,11 +25,10 @@ const SignUp = () => {
       const data = {
         username,
         email,
-        password,
-        role: "SH",
+        password
       };
       const response = await fetch(
-        "https://api.shardmind.io/api/v1/auth/register",
+        "https://api.demolab.app/register",
         {
           method: "POST",
           headers: {

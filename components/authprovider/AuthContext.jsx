@@ -13,13 +13,24 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const googleSignIn = () => {
+
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      
+      const token = await result.user.getIdToken();
+      
+      localStorage.setItem("token", token);
+      console.log("Token stored:", token);
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
   };
 
   const logOut = () => {
     signOut(auth);
+    localStorage.removeItem("token");
   };
 
   useEffect(() => {
