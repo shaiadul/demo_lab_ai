@@ -51,8 +51,7 @@ const HeaderDashboard = () => {
 
   const handleSignOut = async () => {
     try {
-      localStorage.removeItem("token");
-      localStorage.removeItem("email");
+      localStorage.removeItem("user");
 
       router.push("/authentication/signin");
     } catch (error) {

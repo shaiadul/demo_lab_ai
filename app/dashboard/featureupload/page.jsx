@@ -11,8 +11,9 @@ const Page = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { localStorage } = window;
-      const guard = localStorage.getItem("token");
-      if (!guard && !user) {
+      const guard = localStorage.getItem("user");
+      const username = JSON.parse(guard).user.username;
+      if (!guard && !user && !username) {
         router.push("/authentication/signin");
       }
     }

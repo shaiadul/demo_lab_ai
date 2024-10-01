@@ -13,14 +13,13 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      
+
       const token = await result.user.getIdToken();
-      
+
       localStorage.setItem("token", token);
       console.log("Token stored:", token);
     } catch (error) {

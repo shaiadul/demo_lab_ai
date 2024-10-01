@@ -16,35 +16,31 @@ const SignIn = () => {
   const router = useRouter();
 
   const handleSignIn = async (e) => {
+    e.preventDefault();
     setError("");
     setMassage("");
     setLoading(true);
+
     const formData = new FormData(e.target);
-    const email = formData.get("email");
+
+    const username = formData.get("email");
     const password = formData.get("password");
+
+    const formdata = new FormData();
+
+    formdata.append("username", username);
+    formdata.append("password", password);
+
     try {
       const response = await fetch("https://api.demolab.app/login_by_email", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: email,
-          password: password,
-        }),
+        body: formdata,
       });
-
-      if (response) {
-        const data = await response.json();
+      const data = await response.json();
+      if (data?.access_token) {
         setLoading(false);
-
-        localStorage.setItem("token", data?.accessToken);
-
-        Cookies.set("jwt", data?.accessToken);
+        Cookies.set("jwt", data?.access_token);
         localStorage.setItem("user", JSON.stringify(data));
-
-        console.log(response);
-
         setMassage("Successfully logged in");
         router.push("/dashboard/personalfeed");
       } else {
@@ -53,8 +49,9 @@ const SignIn = () => {
         setLoading(false);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error:", error?.detail);
       setError("Invalid email or password");
+      setLoading(false);
     }
   };
 
@@ -146,9 +143,11 @@ const SignIn = () => {
                   </div>
                 </div>
 
-                {error && <div className="text-red-500 text-sm">{error}</div>}
+                {error && (
+                  <div className="text-red-500 text-sm mt-1">{error}</div>
+                )}
                 {massage && (
-                  <div className="text-green-500 text-sm">{massage}</div>
+                  <div className="text-green-500 text-sm  mt-1">{massage}</div>
                 )}
 
                 <div className="flex items-center justify-between">

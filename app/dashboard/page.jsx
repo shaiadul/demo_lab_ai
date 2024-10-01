@@ -1,7 +1,7 @@
 "use client";
 import { UserAuth } from "@/components/authprovider/AuthContext";
 import { redirect, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+
 
 const Dashboard = () => {
   const router = useRouter();
@@ -11,15 +11,13 @@ const Dashboard = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { localStorage } = window;
-      const guard = localStorage.getItem("token");
+      const guard = localStorage.getItem("user");
       if (!guard && !user) {
         router.push("/authentication/signin");
       }
     }
   }, []);
-
-  useEffect;
-  return <div></div>;
+  return <></>;
 };
 
 export default Dashboard;
