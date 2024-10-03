@@ -18,15 +18,14 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
     setLoading(true);
     if (!file) return;
     const user = JSON.parse(localStorage.getItem("user"));
-    const id = user?.user?._id;
-    const token = user?.accessToken;
+
+    const authToken = user?.access_token;
 
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${token}`);
+    myHeaders.append("Authorization", `Bearer ${authToken}`);
 
     const formdata = new FormData();
-    formdata.append("userId", id);
-    formdata.append("file", file, file["name"]);
+    formdata.append("data", file);
 
     const requestOptions = {
       method: "POST",
@@ -35,70 +34,59 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
       redirect: "follow",
     };
 
-    fetch("https://api.shardmind.io/api/v1/storage/upload?file", requestOptions)
+    fetch("https://api.demolab.app/upload_file", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setCurrentStep(2);
         setIsFileUploaded(true);
 
-        const originalFileName = result?.result?.originalFilename;
-        const url = `users/${id}/${originalFileName}`;
-        const data = JSON.stringify({
-          auth_token: token,
-          url,
-        });
+        const file_key = result?.file_key;
+        console.log("result: ", result);
+        console.log("file_key", file_key);
 
-        const parsedData = JSON.parse(data);
-
-        setCurrentFileUrl(parsedData?.url);
         setLoading(false);
-        handleApiCall(parsedData?.url);
+        handleApiCall(file_key);
       });
   };
+
 
   const handleApiCall = async (url) => {
     setLoading(true);
     console.log("handleApiCallingg,,,,,,,,,,,,,,,,");
 
     const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.user?._id;
-    const authToken = user?.accessToken;
-
-    const postData = {
-      url: url,
-      auth_token: authToken,
-      userId: userId,
+    const authToken = user?.access_token;
+    const myHeaders = {
+      Authorization: `Bearer ${authToken}`,
     };
 
-    console.log("postData", postData);
-
     if (url) {
-      const response = await axios.post(
-        "https://38wta.apps.beam.cloud/music_sep",
-        postData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
+      try {
+        const response = await axios.get(
+          `https://api.demolab.app/read_file?file_key=${url}`,
+          { headers: myHeaders }
+        );
+
+        console.log("music_sep response", response);
+        setComplete(true);
+        if (response) {
+          const voiceUrls = response?.data;
+          const allUrls = [];
+
+          const promises = voiceUrls.map(async (voiceUrl) => {
+            const fileKey = voiceUrl;
+            const urlsLink = await readFile(fileKey);
+            allUrls.push(urlsLink);
+            return urlsLink;
+          });
+
+          const playedUrls = await Promise.all(promises);
+          setAllUrls(response);
         }
-      );
-
-      console.log("music_sep response", response?.data?.voice_urls);
-      setComplete(true);
-      setLoading(false);
-      if (response?.data?.voice_urls) {
-        const voiceUrls = response?.data?.voice_urls;
-        const allUrls = [];
-
-        const promises = voiceUrls.map(async (voiceUrl) => {
-          const fileKey = voiceUrl;
-          const urlsLink = await readFile(fileKey);
-          allUrls.push(urlsLink);
-          return urlsLink;
-        });
-
-        const playedUrls = await Promise.all(promises);
-        setAllUrls(playedUrls);
+      } catch (error) {
+        console.error("Error during API call", error);
+      } finally {
+        setLoading(false);
       }
     }
   };

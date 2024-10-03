@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
   faBars,
   faGear,
-  faHeadphonesAlt,
   faHeadphonesSimple,
   faHome,
   faQuestion,
@@ -58,17 +57,19 @@ const HeaderDashboard = () => {
       console.error("Error:", error);
     }
   };
-
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const { localStorage } = window;
-      setUserData((prev) => {
-        return {
-          ...prev,
-          username: localStorage.getItem("username"),
-          email: localStorage.getItem("email"),
-        };
-      });
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const userObject = JSON.parse(storedUser);
+        setUserData((prev) => {
+          return {
+            ...prev,
+            username: userObject.user.username,
+            email: userObject.user.email,
+          };
+        });
+      }
     }
   }, []);
 
@@ -79,6 +80,9 @@ const HeaderDashboard = () => {
     open: { opacity: 1, x: 0 },
     closed: { opacity: 0, x: "100%" },
   };
+
+
+  console.log("GoogleUser", user);
 
   return (
     <div className=" w-full flex items-center justify-between h-16 fixed z-20 bg-[#0c051f]">

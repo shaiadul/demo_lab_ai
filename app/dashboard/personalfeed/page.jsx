@@ -11,8 +11,7 @@ const PersonalFeed = () => {
     if (typeof window !== "undefined") {
       const { localStorage } = window;
       const guard = localStorage.getItem("user");
-      const username = JSON.parse(guard).user.username;
-      if (!guard && !user && !username) {
+      if (!guard && !user ) {
         router.push("/authentication/signin");
       }
     }
