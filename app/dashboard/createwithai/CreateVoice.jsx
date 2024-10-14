@@ -8,9 +8,12 @@ export default function CreateVoice() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [lyrics, setLyrics] = useState("");
-  const [isInstrumental, setIsInstrumental] = useState(false);
+  const [isInstrumental, setIsInstrumental] = useState(true);
   const [loading, setLoading] = useState(false);
   const [audioUrls, setAudioUrls] = useState("");
+  const [tags, setTags] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [auto, setAuto] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -22,6 +25,20 @@ export default function CreateVoice() {
         setDuration(audioRef.current.duration);
     }
   }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      e.preventDefault();
+      if (!tags.includes(inputValue.trim())) {
+        setTags([...tags, inputValue.trim()]);
+      }
+      setInputValue("");
+    }
+  };
+
+  const removeTag = (indexToRemove) => {
+    setTags(tags.filter((_, index) => index !== indexToRemove));
+  };
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -43,22 +60,36 @@ export default function CreateVoice() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const data = {
-      prompt: lyrics,
-      make_instrumental: isInstrumental,
-      wait_audio: true,
-    };
+
+    let apiUrl = "";
+    let requestData = {};
+    const formData = new FormData(e.target);
+
+    const title = formData.get("title");
+    if (title && tags) {
+      // Manual mode
+      apiUrl = "https://api.demolab.app/generate_music/";
+      requestData = {
+        prompt: lyrics, 
+        tags: tags, 
+        title: title, 
+        make_instrumental: isInstrumental,
+      };
+    } else {
+      // Auto mode
+      apiUrl = "https://api.demolab.app/generate_gpt/";
+      requestData = {
+        prompt: lyrics, 
+        make_instrumental: isInstrumental,
+      };
+    }
 
     try {
-      const response = await axios.post(
-        "https://api.aimlapi.com/generate",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer 0ed0c56229ea4609a164084f2250a9dd`,
-          },
-        }
-      );
+      const response = await axios.post(apiUrl, requestData, {
+        headers: {
+          Authorization: `Bearer 0ed0c56229ea4609a164084f2250a9dd`, 
+        },
+      });
       setLoading(false);
       console.log("Voice generated:", response.data);
       setAudioUrls(response?.data);
@@ -67,6 +98,7 @@ export default function CreateVoice() {
       console.error("Error generating voice:", error);
     }
   };
+
 
   return (
     <section>
@@ -78,23 +110,86 @@ export default function CreateVoice() {
       >
         <div className="">
           <form onSubmit={handleSubmit}>
-            <div className="flex justify-center items-center max-w-[220px] my-4">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  id="instrumental"
-                  checked={isInstrumental}
-                  onChange={() => setIsInstrumental(!isInstrumental)}
-                />
-                <span className="slider round"></span>
-              </label>
-              <span className="font-serif font-semibold text-lg ml-2">
-                Instrumental
-              </span>
+            <div className="flex justify-between items-center mx-5">
+              <div className="flex justify-center items-center max-w-[220px] my-4">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    id="instrumental"
+                    checked={isInstrumental}
+                    onChange={() => setIsInstrumental(!isInstrumental)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <span className="font-serif font-semibold text-lg ml-2">
+                  Instrumental
+                </span>
+              </div>
+
+              <div className="flex justify-center items-center max-w-[220px] my-4">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    id="auto"
+                    checked={auto}
+                    onChange={() => setAuto(!auto)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <span className="font-serif font-semibold text-lg ml-2">
+                  {auto ? "Auto" : "Manual"}
+                </span>
+              </div>
             </div>
 
+            {!auto && (
+              <div>
+                <div className="relative p-5">
+                  <h2 className="font-bold mb-1 text-gray-700 block">Title</h2>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter a title for your song"
+                    className="block w-full mt-1 py-2 px-3 rounded-md shadow-sm focus:outline-none bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white dark:bg-gray-800"
+                  />
+                </div>
+                <div className="relative px-5">
+                  <h2 className="font-bold mb-1 text-gray-700 block">Tags</h2>
+                  <div className=" w-full mt-1 py-2 px-3 rounded-md shadow-sm focus:outline-none bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white dark:bg-gray-800 flex flex-wrap items-center">
+                    {tags.map((tag, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white px-2 py-1 rounded-md mr-2 mb-2"
+                      >
+                        <span>{tag}</span>
+                        <button
+                          type="button"
+                          className="ml-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                          onClick={() => removeTag(index)}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                    <input
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      className="bg-transparent text-md flex-grow border-none focus:outline-none dark:text-white dark:bg-gray-800"
+                      placeholder="Type and press Enter"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm text-gray-500">
+                    {/* Output: {tags.join(", ")} */}
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="relative p-5">
-              <h2 className="font-bold mb-1 text-gray-700 block">Lyrics</h2>
+              <h2 className="font-bold mb-1 text-gray-700 block">{auto ? "Prompt" : "Lyrics"}</h2>
               <textarea
                 rows="8"
                 maxLength="600"

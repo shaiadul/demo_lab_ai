@@ -49,7 +49,6 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
       });
   };
 
-
   const handleApiCall = async (url) => {
     setLoading(true);
     console.log("handleApiCallingg,,,,,,,,,,,,,,,,");

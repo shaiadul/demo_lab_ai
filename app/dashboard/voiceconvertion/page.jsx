@@ -7,14 +7,14 @@ import { UserAuth } from "@/components/authprovider/AuthContext";
 
 const Page = () => {
   const router = useRouter();
-  const { user } = UserAuth();
+  // const { user } = UserAuth();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { localStorage } = window;
       const guard = localStorage.getItem("user");
       const username = JSON.parse(guard).user.username;
-      if (!guard && !user && !username) {
+      if (!guard && !username) {
         router.push("/authentication/signin");
       }
     }

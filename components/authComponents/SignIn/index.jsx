@@ -5,15 +5,17 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { user, googleSignIn } = UserAuth();
+  // const { user, googleSignIn } = UserAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [massage, setMassage] = useState("");
 
   const router = useRouter();
+  const { data: session } = useSession()
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -59,15 +61,31 @@ const SignIn = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleGoogleSignIn = async () => {
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     await googleSignIn();
+  //     setMassage("Successfully logged in");
+  //     router.push("/dashboard/personalfeed");
+  //   } catch (error) {
+  //     setError("Invalid email or password");
+  //   }
+  // };
+
+  const handleSignInWithGoogle = async () => {
     try {
-      await googleSignIn();
-      setMassage("Successfully logged in");
-      router.push("/dashboard/personalfeed");
+      const response = await signIn("google");
+      if (response.ok) {
+        setMassage("Successfully logged in");
+        // router.push("/dashboard/personalfeed");
+      }
     } catch (error) {
-      setError("Invalid email or password");
+      setError("Error: Google sign-in failed");
     }
   };
+
+
+  console.log("session", session)
+
   return (
     <section className="container mx-auto">
       <div className="absolute bg-[#0C051F] top-0 left-0 bottom-0 leading-5 h-full w-full overflow-hidden"></div>
@@ -176,7 +194,8 @@ const SignIn = () => {
               </div>
               <div className="flex justify-center gap-5 w-full ">
                 <button
-                  onClick={handleGoogleSignIn}
+                  onClick={handleSignInWithGoogle}
+                  // onClick={() => signIn("google")}
                   className="w-full flex items-center justify-center mb-6 md:mb-0 border border-gray-300 text-sm text-gray-500 p-3  rounded-lg tracking-wide font-medium  cursor-pointer transition ease-in duration-500"
                 >
                   <svg

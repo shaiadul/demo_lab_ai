@@ -1,21 +1,21 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { UserAuth } from "@/components/authprovider/AuthContext";
+// import { UserAuth } from "@/components/authprovider/AuthContext";
 
 const PersonalFeed = () => {
   const router = useRouter();
-  const { user } = UserAuth();
+  // const { user } = UserAuth();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const { localStorage } = window;
-      const guard = localStorage.getItem("user");
-      if (!guard && !user ) {
-        router.push("/authentication/signin");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const { localStorage } = window;
+  //     const guard = localStorage.getItem("user");
+  //     if (!guard && !user ) {
+  //       router.push("/authentication/signin");
+  //     }
+  //   }
+  // }, []);
 
   return (
     <section className="mx-5 my-10">

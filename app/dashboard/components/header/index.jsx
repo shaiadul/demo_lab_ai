@@ -25,20 +25,20 @@ const HeaderDashboard = () => {
   const [showDiv, setShowDiv] = useState(false);
   const [showAside, setShowAside] = useState(false);
   const [userData, setUserData] = useState({ username: "", email: "" });
-  const { user, logOut } = UserAuth();
+  // const { user, logOut } = UserAuth();
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
   const pathname = usePathname();
-  const handleGoogleSignOut = async () => {
-    try {
-      await logOut();
+  // const handleGoogleSignOut = async () => {
+  //   try {
+  //     await logOut();
 
-      router.push("/authentication/signin");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     router.push("/authentication/signin");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -46,7 +46,7 @@ const HeaderDashboard = () => {
       setLoading(false);
     };
     checkAuthentication();
-  }, [user]);
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -82,7 +82,7 @@ const HeaderDashboard = () => {
   };
 
 
-  console.log("GoogleUser", user);
+  // console.log("GoogleUser", user);
 
   return (
     <div className=" w-full flex items-center justify-between h-16 fixed z-20 bg-[#0c051f]">
@@ -117,12 +117,12 @@ const HeaderDashboard = () => {
           </li>
           <li className="relative">
             <div className="w-7 lg:w-10 h-7 lg:h-10 object-fit">
-              <img
+              {/* <img
                 onClick={() => setShowDiv(!showDiv)}
                 className="rounded-full cursor-pointer"
                 src={user?.photoURL || "https://i.ibb.co/QcK63FR/1.jpg"}
                 alt="user picture"
-              />
+              /> */}
             </div>
             {/* users card */}
             <motion.div
@@ -138,17 +138,17 @@ const HeaderDashboard = () => {
                 <div className="bg_color_gradient absolute right-0 my-5 p-3 rounded-md flex flex-col justify-center items-center mx-auto w-56 transition-all">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src={user?.photoURL || "https://i.ibb.co/QcK63FR/1.jpg"}
+                    // src={user?.photoURL || "https://i.ibb.co/QcK63FR/1.jpg"}
                     alt=""
                   />
 
                   <p className="text-sm lg:text-md font-semibold text-white">
-                    {user?.displayName || userData?.username}
+                    {/* {user?.displayName || userData?.username} */}
                   </p>
                   <p className="text-xs lg:text-sm mt-1 text-gray-200">
-                    {user?.email || userData?.email}
+                    {/* {user?.email || userData?.email} */}
                   </p>
-                  <div className="flex flex-col justify-center items-center ">
+                  {/* <div className="flex flex-col justify-center items-center ">
                     {userData || user ? (
                       <>
                         <button
@@ -202,7 +202,7 @@ const HeaderDashboard = () => {
                       />{" "}
                       Settings
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </motion.div>
