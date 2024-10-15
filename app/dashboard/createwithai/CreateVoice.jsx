@@ -8,7 +8,7 @@ export default function CreateVoice() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [lyrics, setLyrics] = useState("");
-  const [isInstrumental, setIsInstrumental] = useState(true);
+  const [isInstrumental, setIsInstrumental] = useState(false);
   const [loading, setLoading] = useState(false);
   const [audioUrls, setAudioUrls] = useState("");
   const [tags, setTags] = useState([]);
@@ -61,48 +61,56 @@ export default function CreateVoice() {
     e.preventDefault();
     setLoading(true);
 
+    const formData = new FormData(e.target);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const auth_token = user?.access_token;
+    const title = formData.get("title");
     let apiUrl = "";
     let requestData = {};
-    const formData = new FormData(e.target);
 
-    const title = formData.get("title");
-    if (title && tags) {
+    if (!auto && title && tags) {
       // Manual mode
       apiUrl = "https://api.demolab.app/generate_music/";
       requestData = {
-        prompt: lyrics, 
-        tags: tags, 
-        title: title, 
+        prompt: lyrics,
+        tags: tags.join(","),
+        title: title,
         make_instrumental: isInstrumental,
       };
     } else {
       // Auto mode
       apiUrl = "https://api.demolab.app/generate_gpt/";
       requestData = {
-        prompt: lyrics, 
+        prompt: lyrics,
         make_instrumental: isInstrumental,
       };
     }
 
+    console.log("Request data:", requestData);
     try {
       const response = await axios.post(apiUrl, requestData, {
         headers: {
-          Authorization: `Bearer 0ed0c56229ea4609a164084f2250a9dd`, 
+          Authorization: `Bearer ${auth_token}`,
         },
       });
       setLoading(false);
-      console.log("Voice generated:", response.data);
-      setAudioUrls(response?.data);
+      setAudioUrls(response?.data?.generation?.audio_url);
+      console.log("Audio urls:", response?.data?.generation);
+      console.log("response", response?.data);
     } catch (error) {
       setLoading(false);
       console.error("Error generating voice:", error);
     }
   };
 
-
   return (
     <section>
-      {loading && <Loading />}
+      {loading && (
+        <div className="flex justify-center items-center h-full w-full bg-gray-900 bg-opacity-50 z-50 fixed top-0 left-0 right-0 both-screen">
+          <Loading />
+        </div>
+      )}
+
       <div
         className={`grid grid-cols-1 md:grid-cols-3 justify-between items-center gap-5 ${
           loading ? "hidden" : ""
@@ -189,7 +197,9 @@ export default function CreateVoice() {
             )}
 
             <div className="relative p-5">
-              <h2 className="font-bold mb-1 text-gray-700 block">{auto ? "Prompt" : "Lyrics"}</h2>
+              <h2 className="font-bold mb-1 text-gray-700 block">
+                {auto ? "Prompt" : "Lyrics"}
+              </h2>
               <textarea
                 rows="8"
                 maxLength="600"
@@ -217,13 +227,15 @@ export default function CreateVoice() {
             <div className="max-w-full bg-gradient-to-r from-[#4d93f660] to-[#aa26b670] rounded-lg shadow-lg overflow-hidden">
               <div className="relative">
                 <img
-                  src={audioUrls[0]?.image_url}
+                  src={audioUrls?.image_url}
                   className="object-cover w-full h-52"
                   alt="Album Cover"
                 />
                 <div className="absolute p-4 inset-0 flex flex-col justify-end bg-gradient-to-b from-transparent to-gray-900 backdrop backdrop-blur-5 text-white">
-                  <h3 className="font-bold">{audioUrls[0]?.title}</h3>
-                  <span className="opacity-70">{audioUrls[0]?.tags}</span>
+                  <h3 className="font-bold">{audioUrls?.title}</h3>
+                  <span className="opacity-70">
+                    {audioUrls?.tags.join(", ")}
+                  </span>
                 </div>
               </div>
               <div>
@@ -321,7 +333,7 @@ export default function CreateVoice() {
               </ul>
               <audio
                 ref={audioRef}
-                src={audioUrls[1]?.audio_url}
+                src={audioUrls?.audio_url}
                 className="w-full h-0"
                 controls
               ></audio>

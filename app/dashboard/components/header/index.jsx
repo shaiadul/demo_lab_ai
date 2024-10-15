@@ -117,18 +117,19 @@ const HeaderDashboard = () => {
           </li>
           <li className="relative">
             <div className="w-7 lg:w-10 h-7 lg:h-10 object-fit">
-              {/* <img
+              <img
                 onClick={() => setShowDiv(!showDiv)}
                 className="rounded-full cursor-pointer"
-                src={user?.photoURL || "https://i.ibb.co/QcK63FR/1.jpg"}
+                // src={user?.photoURL || "https://i.ibb.co/QcK63FR/1.jpg"}
+                src={"https://i.ibb.co/QcK63FR/1.jpg"}
                 alt="user picture"
-              /> */}
+              />
             </div>
-            {/* users card */}
+         
             <motion.div
-              // className={`transition-transform duration-300 ease-in-out transform ${
-              //   showDiv ? "translate-x-0" : "translate-x-full"
-              // }`}
+              className={`transition-transform duration-300 ease-in-out transform ${
+                showDiv ? "translate-x-0" : "translate-x-full"
+              }`}
               initial={false}
               animate={showDiv ? "open" : "closed"}
               variants={variants}
@@ -139,22 +140,25 @@ const HeaderDashboard = () => {
                   <img
                     className="w-10 h-10 rounded-full"
                     // src={user?.photoURL || "https://i.ibb.co/QcK63FR/1.jpg"}
+                    src={ "https://i.ibb.co/QcK63FR/1.jpg"}
                     alt=""
                   />
 
                   <p className="text-sm lg:text-md font-semibold text-white">
                     {/* {user?.displayName || userData?.username} */}
+                    {userData?.username}
                   </p>
                   <p className="text-xs lg:text-sm mt-1 text-gray-200">
                     {/* {user?.email || userData?.email} */}
+                    { userData?.email}
                   </p>
-                  {/* <div className="flex flex-col justify-center items-center ">
-                    {userData || user ? (
+                  <div className="flex flex-col justify-center items-center ">
+                    {userData ? (
                       <>
                         <button
                           onClick={handleSignOut}
                           className={`${
-                            user ? "hidden" : "block"
+                            !userData ? "hidden" : "block"
                           } group btn_color_gradient hover:scale-105 duration-500 text-white uppercase text-sm px-2 py-1 rounded-md mt-2 w-full`}
                         >
                           <FontAwesomeIcon
@@ -163,7 +167,7 @@ const HeaderDashboard = () => {
                           />
                           Sign Out
                         </button>
-                        <button
+                        {/* <button
                           onClick={() => handleGoogleSignOut()}
                           className={`${
                             user ? "block" : "hidden"
@@ -174,7 +178,7 @@ const HeaderDashboard = () => {
                             className="w-4 h-4 mr-1"
                           />
                           Sign Out
-                        </button>
+                        </button> */}
                       </>
                     ) : (
                       <Link href="/authentication/signin">
@@ -202,7 +206,7 @@ const HeaderDashboard = () => {
                       />{" "}
                       Settings
                     </button>
-                  </div> */}
+                  </div>
                 </div>
               )}
             </motion.div>
