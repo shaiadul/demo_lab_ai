@@ -86,7 +86,7 @@ export default function CreateVoice() {
       };
     }
 
-    console.log("Request data:", requestData);
+    console.log("Request data:", requestData, auth_token);
     try {
       const response = await axios.post(apiUrl, requestData, {
         headers: {
@@ -234,7 +234,7 @@ export default function CreateVoice() {
                 <div className="absolute p-4 inset-0 flex flex-col justify-end bg-gradient-to-b from-transparent to-gray-900 backdrop backdrop-blur-5 text-white">
                   <h3 className="font-bold">{audioUrls?.title}</h3>
                   <span className="opacity-70">
-                    {audioUrls?.tags.join(", ")}
+                    {audioUrls?.tags}
                   </span>
                 </div>
               </div>
