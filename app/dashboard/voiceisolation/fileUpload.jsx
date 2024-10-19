@@ -45,8 +45,41 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
         console.log("file_key", file_key);
 
         setLoading(false);
-        handleApiCall(file_key);
+        // handleApiCall(file_key);
+        handleMusicSeparator(file_key);
       });
+  };
+
+  const handleMusicSeparator = async (url) => {
+    setLoading(true);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const authToken = user?.access_token;
+    const myHeaders = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    try {
+      const response = await axios.post(
+        "https://api.demolab.app/music_sep",
+        {
+          url: url,
+        },
+        { headers: myHeaders }
+      );
+
+      console.log("music_sep response", response);
+      setComplete(true);
+      if (response) {
+        const voiceUrls = response?.data?.data?.voice_urls || [];
+
+        setAllUrls(voiceUrls);
+        readFiles(voiceUrls);
+      }
+    } catch (error) {
+      console.error("Error during API call", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleApiCall = async (url) => {
@@ -90,35 +123,48 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
     }
   };
 
-  console.log("all rul: ", allUrls);
-
-  const readFile = async (fileKey) => {
+  const readFiles = async (fileKeys) => {
     setLoading(true);
-    const client = new S3Client({
-      region: "nyc3",
-      credentials: {
-        accessKeyId: "DO00E62JWRAHTAANAADR",
-        secretAccessKey: "Z5ICzGAlMg/7B3WTAUzAbPy9SX910ZrrVovadJjc98s",
-      },
-      endpoint: "https://nyc3.digitaloceanspaces.com",
-    });
 
-    const command = new GetObjectCommand({
-      Bucket: "shardmind.ai",
-      Key: fileKey,
-    });
+    const user = JSON.parse(localStorage.getItem("user"));
+    const authToken = user?.access_token;
+    const myHeaders = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
     try {
-      const url = await getSignedUrl(client, command, { expiresIn: 3600 });
-      console.log("Signed URL:", url);
-      setCurrentFileUrl(url);
+      const fetchPromises = fileKeys.map(async (fileKey) => {
+        const fileUrl = `https://api.demolab.app/read_file?file_key=${fileKey}`;
+        const response = await fetch(fileUrl, requestOptions);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.text();
+        return result;
+      });
+
+      const results = await Promise.all(fetchPromises);
+      const cleanedResults = results.map((url) => url.replace(/^"|"$/g, ""));
+      console.log("Files content:", cleanedResults);
+      setCurrentFileUrl(cleanedResults);
       setLoading(false);
-      return url; // The URL is valid for 1 hour
     } catch (error) {
       console.error("Error from download:", error);
       setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
+
+  console.log("all rul: ", currentFileUrl);
 
   const downloadFile = async () => {
     // Fetch the file content
@@ -138,13 +184,39 @@ const ImageUpload = ({ setCurrentStep, setComplete }) => {
 
   return (
     <div className="font-sans mt-20">
-      {loading && <Loading />}
+      {loading && (
+        <div className="flex justify-center items-center h-full w-full bg-gray-900 bg-opacity-50 z-50 fixed top-0 left-0 right-0 both-screen">
+          <Loading />
+        </div>
+      )}
       {currentFileUrl ? (
-        <>
-          {allUrls.map((url, index) => {
-            return <MusicPlayer key={index} url={url} />;
-          })}
-        </>
+        <div
+          className={`my-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${
+            loading ? "hidden" : ""
+          }`}
+        >
+          {currentFileUrl?.map((url, index) => (
+            <div
+              key={index}
+              className="relative bg-[#311539] rounded-lg shadow-lg overflow-hidden"
+            >
+              <div className="relative w-full h-48 bg-gray-200">
+                <div className="flex justify-center items-center h-full text-gray-500">
+                  <span>No Image</span>
+                </div>
+              </div>
+
+              <div className="p-4">
+                <h3 className="text-lg font-bold">Uploaded File {index + 1}</h3>
+
+                <audio controls className="w-full mt-2">
+                  <source src={url} type="audio/mp3" />
+                  Your browser does not support the audio tag.
+                </audio>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <label
           htmlFor="dropzone-file"
